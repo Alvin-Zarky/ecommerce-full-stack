@@ -1,0 +1,5 @@
+export const INDEX= "/"
+export const CART= "/shopping-cart"
+export const SIGN_IN= "/sign-in"
+export const PRODUCT= "/product"
+export const NOT_FOUND= "*"

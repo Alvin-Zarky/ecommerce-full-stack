@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300&display=swap');
+@import "../../../node_modules/bootstrap/dist/css/bootstrap.min.css";
+@import "../../../node_modules/slick-carousel/slick/slick.css";
+@import "../../../node_modules/slick-carousel/slick/slick-theme.css";
+@import "./variable.scss";
+@import "./mixin.scss";
+
+body{
+  font-family: 'Roboto Condensed', sans-serif;
+  overflow-x:hidden;
+}
+.maximum-width-page{
+  width: 80%;
+  margin: auto;
+}
