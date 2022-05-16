@@ -95,9 +95,11 @@ export default function ShoppingCart() {
                 <div className="price-item">
                   <span>$ 398.99</span>
                 </div>
-                <div className="btn-procceed">
-                  <span>Proceed to checkout</span>
-                </div>
+                <form>
+                  <button className="btn-procceed">
+                    Proceed to checkout
+                  </button>
+                </form>
               </div>
             </Col>  
           </Row>

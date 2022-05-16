@@ -5,7 +5,7 @@ import * as Routes from "../../router";
 import {Row, Col} from "reactstrap";
 import {Link} from "react-router-dom";
 import Slider from 'react-slick';
-import {AiOutlineStar} from "react-icons/ai";
+import Rating from '../../components/Rating';
 import Footer from '../../components/Footer';
 import './overview.scss'
 
@@ -17,6 +17,7 @@ export default function Overview() {
     slidesToShow: 1,
     slidesToScroll: 1,
   };
+  const rating= 3.5
   return (
     <>
       <NavBar />
@@ -58,69 +59,11 @@ export default function Overview() {
                   </div>
                   <div className="detail-product">
                     <h5>Airpods Wireless Bluetooth Headphones</h5>
-                    <p>
-                      <AiOutlineStar /> <AiOutlineStar /> <AiOutlineStar /> <AiOutlineStar /> <AiOutlineStar /> <span>2 Reviews</span>
-                    </p>
+                    <Rating numRating={rating} />
                     <span>$ 89.99</span>
                   </div>
                 </div>
               </Link>
-            </Col>
-            <Col xl="3" lg="3" md="4">
-              <div className="box-product">
-                <div className="image-per-product">
-                  <img src={Images.IMAGE_1} alt="image_1" />
-                </div>
-                <div className="detail-product">
-                  <h5>Airpods Wireless Bluetooth Headphones</h5>
-                  <p>
-                    <AiOutlineStar /> <AiOutlineStar /> <AiOutlineStar /> <AiOutlineStar /> <AiOutlineStar /> <span>2 Reviews</span>
-                  </p>
-                  <span>$ 89.99</span>
-                </div>
-              </div>
-            </Col>
-            <Col xl="3" lg="3" md="4">
-              <div className="box-product">
-                <div className="image-per-product">
-                  <img src={Images.IMAGE_2} alt="image_1" />
-                </div>
-                <div className="detail-product">
-                  <h5>Airpods Wireless Bluetooth Headphones</h5>
-                  <p>
-                    <AiOutlineStar /> <AiOutlineStar /> <AiOutlineStar /> <AiOutlineStar /> <AiOutlineStar /> <span>2 Reviews</span>
-                  </p>
-                  <span>$ 89.99</span>
-                </div>
-              </div>
-            </Col>
-            <Col xl="3" lg="3" md="4">
-              <div className="box-product">
-                <div className="image-per-product">
-                  <img src={Images.IMAGE_1} alt="image_1" />
-                </div>
-                <div className="detail-product">
-                  <h5>Airpods Wireless Bluetooth Headphones</h5>
-                  <p>
-                    <AiOutlineStar /> <AiOutlineStar /> <AiOutlineStar /> <AiOutlineStar /> <AiOutlineStar /> <span>2 Reviews</span>
-                  </p>
-                  <span>$ 89.99</span>
-                </div>
-              </div>
-            </Col>
-            <Col xl="3" lg="3" md="4">
-              <div className="box-product">
-                <div className="image-per-product">
-                  <img src={Images.IMAGE_1} alt="image_1" />
-                </div>
-                <div className="detail-product">
-                  <h5>Airpods Wireless Bluetooth Headphones</h5>
-                  <p>
-                    <AiOutlineStar /> <AiOutlineStar /> <AiOutlineStar /> <AiOutlineStar /> <AiOutlineStar /> <span>2 Reviews</span>
-                  </p>
-                  <span>$ 89.99</span>
-                </div>
-              </div>
             </Col>
           </Row>
         </div>

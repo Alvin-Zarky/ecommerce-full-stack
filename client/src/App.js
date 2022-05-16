@@ -6,6 +6,7 @@ import NotFound from "./view/not-found"
 import ShoppingCart from './view/shopping-carts';
 import SignIn from './view/sign-in';
 import ProductDetail from './view/product-detail';
+import SignUp from './view/sign-up';
 
 function App() {
   return (
@@ -20,6 +21,9 @@ function App() {
           </Route>
           <Route path={Routes.SIGN_IN}>
             <SignIn />
+          </Route>
+          <Route path={Routes.SIGN_UP}>
+            <SignUp />
           </Route>
           <Route path={`${Routes.PRODUCT}/:id`}>
             <ProductDetail />
