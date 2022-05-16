@@ -2,8 +2,7 @@
   "name": "mern-ecommerce",
   "version": "1.0.0",
   "description": "Web project mern ecommerce full stack related with frontend & backend collaborate together to make a powerful web application with mern stands for MongoDb, Node.js, Express, React. This project is completely project base and include all extensive features such as advanced everything to dive deeply to mastery...! etc",
-  "main": "server.js",
-  "type": "module",
+  "main": "index.js",
   "scripts": {
     "start": "node backend/server.js",
     "server": "nodemon backend/server.js",
