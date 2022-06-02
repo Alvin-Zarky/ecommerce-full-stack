@@ -1,15 +1,22 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import NavBar from '../../components/Navbar';
-import * as Images from "../../constant/images";
 import * as Routes from "../../router";
 import {Row, Col} from "reactstrap";
 import {Link} from "react-router-dom";
 import Slider from 'react-slick';
+import MetaHelmet from '../../components/MetaHelmet';
 import Rating from '../../components/Rating';
 import Footer from '../../components/Footer';
+import Loading from "../../components/Loading"
+import {getProduct, getProductLatest} from "../../features/product/productSlice"
+import {useSelector, useDispatch} from "react-redux"
 import './overview.scss'
 
 export default function Overview() {
+
+  const {products, productSlice, isLoading, isError, message} = useSelector(state => state.product)
+  const dispatch= useDispatch()
+
   const settings = {
     dots: false,
     infinite: true,
@@ -17,54 +24,60 @@ export default function Overview() {
     slidesToShow: 1,
     slidesToScroll: 1,
   };
-  const rating= 3.5
+
+  useEffect(() =>{
+    dispatch(getProduct())
+    dispatch(getProductLatest())
+  }, [dispatch])
+
   return (
     <>
+      <MetaHelmet />
       <NavBar />
       <div className="slick-carosoul">
         <Slider {...settings}>
-          <Link to={`${Routes.PRODUCT}/1`}>
-            <div>
-              <div className="title-image-slider">
-                <span>Airpods wireless bluetooth headphones ($89.99)</span>
+          {productSlice.data && productSlice.data.map((val, ind) =>(            
+            <Link to={`${Routes.PRODUCT}/${val._id}`} key={val._id}>
+              <div>
+                <div className="title-image-slider">
+                  <span>{val.name} ({`$ ${val.price}`})</span>
+                </div>
+                <div className='image-slide'>
+                  <img src={val.image} alt="iamge-1" />
+                </div>
               </div>
-              <div className='image-slide'>
-                <img src={Images.IMAGE_1} alt="iamge-1" />
-              </div>
-            </div>
-          </Link>
-          <Link to={`${Routes.PRODUCT}/2`}>
-            <div>
-              <div className="title-image-slider">
-                <span>Airpods wireless bluetooth headphones ($89.99)</span>
-              </div>
-              <div className='image-slide'>
-                <img src={Images.IMAGE_2} alt="iamge-2" />
-              </div>
-            </div>
-          </Link>
+            </Link>
+          ))}
         </Slider>
       </div>
       <div className="list-products">
         <div className="title-product">
           <span>Latest products</span>
         </div>
+        <div className="error-message">
+          {isError && <span>{message}</span>}
+        </div>
         <div className="core-products">
           <Row>
-            <Col xl="3" lg="3" md="4">
-              <Link to={`${Routes.PRODUCT}/1`}>
-                <div className="box-product">
-                  <div className="image-per-product">
-                    <img src={Images.IMAGE_1} alt="image_1" />
+            {isLoading && (
+              <Loading />
+            )}
+            {!isLoading && products.data && products.data.map((val, ind) =>(
+              <Col xl="3" lg="3" md="4" key={val._id}>
+                <Link to={`${Routes.PRODUCT}/${val._id}`}>
+                  <div className="box-product">
+                    <div className="image-per-product">
+                      <img src={val.image} alt="img" />
+                    </div>  
+                    <div className="detail-product">
+                      <h5>{val.name.length > 35 ? `${val.name.substr(0, 35)}...` : val.name.substr(0, 35) }</h5>
+                      <Rating numRating={val.rating} review={val.numReviews}  />
+                      <span>$ {val.price}</span>
+                    </div>
                   </div>
-                  <div className="detail-product">
-                    <h5>Airpods Wireless Bluetooth Headphones</h5>
-                    <Rating numRating={rating} />
-                    <span>$ 89.99</span>
-                  </div>
-                </div>
-              </Link>
-            </Col>
+                </Link>
+              </Col>
+            ))}
           </Row>
         </div>
       </div>

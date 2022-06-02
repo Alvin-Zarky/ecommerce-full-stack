@@ -5,6 +5,7 @@ import { store } from './app/store';
 import App from './App';
 import './assets/scss/style.scss'
 import './assets/scss/responsive.scss'
+import '../node_modules/react-toastify/dist/ReactToastify.css'
 
 const container = document.getElementById('root');
 const root = createRoot(container);

@@ -2,18 +2,32 @@ import React from 'react';
 import NavBar from "../../components/Navbar"
 import Footer from '../../components/Footer';
 import {Row, Col} from "reactstrap";
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import * as Routes from "../../router"
 import * as Images from "../../constant/images";
 import {AiFillDelete} from "react-icons/ai";
 import './shop-cart.scss'
+import MetaHelmet from '../../components/MetaHelmet';
 
 export default function ShoppingCart() {
+
+  const {user}= useSelector(state => state.auth)
   return (
     <>
+      <MetaHelmet />
       <NavBar />
       <div className="maximum-width-page">
         <div className="shopping-page">
           <Row>
             <Col xl="8" lg="8" md="9">
+              <div className="button">
+                <div className='link-back'>
+                  <Link to={Routes.INDEX}>
+                    <span>Go back</span>
+                  </Link>
+                </div>
+              </div>
               <div className="title-page">
                 <span>Shopping cart</span>
               </div>
@@ -95,11 +109,20 @@ export default function ShoppingCart() {
                 <div className="price-item">
                   <span>$ 398.99</span>
                 </div>
-                <form>
-                  <button className="btn-procceed">
-                    Proceed to checkout
-                  </button>
-                </form>
+                {!user && (
+                  <Link to={`${Routes.SIGN_IN}`}>
+                    <button className="btn-procceed">
+                      Proceed to checkout
+                    </button>
+                  </Link>
+                )}
+                {user && (
+                  <Link to={`${Routes.SHIPPING}`}>
+                    <button className="btn-procceed">
+                      Proceed to checkout
+                    </button>
+                  </Link>
+                )}
               </div>
             </Col>  
           </Row>

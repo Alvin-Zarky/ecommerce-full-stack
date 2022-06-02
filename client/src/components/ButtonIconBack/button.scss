@@ -1,0 +1,13 @@
+.link-back{
+  text-transform: uppercase;
+  font-weight: bolder;
+  font-size: 15px;
+  margin-bottom: 20px;
+  a{
+    text-decoration: none;
+    color:rgb(48, 47, 47);
+    &:hover{
+      color:rgb(48, 47, 47);
+    }
+  }
+}

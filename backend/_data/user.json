@@ -1,0 +1,27 @@
+[
+  {
+    "_id": "62845642e54c4a856acc56ef",
+    "name":"Alvin",
+    "email": "Alvin@gmail.com",
+    "password": "123456",
+    "isAdmin":true
+  },
+  {
+    "_id": "62845642e54c4a856acc56f0",
+    "name": "Yago",
+    "email": "Yago@gmail.com",
+    "password": "123456"
+  },
+  {
+    "_id": "62845642e54c4a856acc56f1",
+    "name":"Sofia",
+    "email": "Sofia@gmail.com",
+    "password": "123456"
+  },
+  {
+    "_id": "62845642e54c4a856acc56f2",
+    "name": "Devil",
+    "email": "Devil@gmail.com",
+    "password": "123456"
+  }
+]

@@ -2,6 +2,10 @@
 .shopping-page{
   margin-top: 25px;
   min-height: 490px;
+  .button{
+    margin-top: -25px;
+    margin-bottom: 10px;
+  }
   .title-page{
     margin-bottom: 20px;
     span{
