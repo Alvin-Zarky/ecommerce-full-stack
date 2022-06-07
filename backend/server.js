@@ -5,17 +5,23 @@ const morgan= require('morgan')
 const logMiddleware= require('./middleware/logMiddleware')
 const errorMiddleware= require('./middleware/errorMiddleware')
 const app = express()
+const path= require("path")
 const connectDb= require('./database/mongoDb')
 const PORT= process.env.PORT || 8000
 const productRouter = require('./router/product')
 const userRouter = require('./router/user')
 const orderRouter= require('./router/order')
 const adminRouter = require('./router/admin')
+const upload= require('./router/upload')
 
 connectDb()
 
 app.use(express.json())
 app.use(express.urlencoded({extended:false}))
+
+//static folder for uploading the images
+// app.use(express.static(path.join(__dirname, '/uploads')))
+app.use(express.static(path.join(__dirname, '/client/public/images')))
 
 //morgan middleware
 // app.use(morgan('dev'))
@@ -33,6 +39,7 @@ app.use('/mern/api/product', productRouter)
 app.use('/mern/api/user', userRouter)
 app.use('/mern/api/order', orderRouter)
 app.use('/mern/api/admin', adminRouter)
+app.use('/mern/api/upload', upload)
 
 app.use((req, res, next) =>{
   res.status(404).json({

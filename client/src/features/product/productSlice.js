@@ -13,9 +13,9 @@ const initialState={
 
 export const getProduct= createAsyncThunk(
   'product/get-product',
-  async(keyword, thunkAPI) =>{
+  async(data, thunkAPI) =>{
     try{
-      return await serviceProduct.getData(keyword)
+      return await serviceProduct.getData(data)
     }catch(err){
       const message= (err.response && err.response.data && err.response.data.message ) || err.message || err.toString() 
       return thunkAPI.rejectWithValue(message)

@@ -26,6 +26,8 @@ import MetaHelmet from './components/MetaHelmet';
 function App() {
   
   const {user} = useSelector(state => state.auth)
+  const {cartItems} = useSelector(state => state.cart)
+  const {shipping, payment} = useSelector(state => state.order)
   const role= localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null
 
   return (
@@ -37,8 +39,7 @@ function App() {
             <Overview />
           </Route>
           <Route path={Routes.SIGN_IN}>
-            {!user && <SignIn />}
-            {user && <Redirect to={Routes.INDEX} />}
+            <SignIn />
           </Route>
           <Route path={Routes.SIGN_UP}>
             {!user && <SignUp />}
@@ -66,14 +67,21 @@ function App() {
           <Route path={Routes.SHIPPING}>
             {user && <Shipping />}
             {!user && <Redirect to={Routes.INDEX} />}
+            {cartItems.length===0 && <Redirect to={Routes.CART} />}
+            {/* {shipping && <Redirect to={Routes.PAYMENT} />} */}
           </Route>
           <Route path={Routes.PAYMENT}>
             {user && <Payment />}
             {!user && <Redirect to={Routes.INDEX} />}
+            {cartItems.length===0 && <Redirect to={Routes.CART} />}
+            {/* {!shipping && <Redirect to={Routes.SHIPPING} />}
+            {payment && <Redirect to={Routes.PLACE_ORDER} />} */}
           </Route>
           <Route path={Routes.PLACE_ORDER}>
             {user && <PlaceOrder />}
             {!user && <Redirect to={Routes.INDEX} />}
+            {cartItems.length===0 && <Redirect to={Routes.CART} />}
+            {/* {!payment && <Redirect to={Routes.PAYMENT} />} */}
           </Route>
           <Route path={`${Routes.PRODUCT}/:id`}>
             <ProductDetail />
@@ -100,15 +108,41 @@ function App() {
             {user && <OrderDetail />}
             {!user && <Redirect to={Routes.INDEX} />}
           </Route>
-          <Route path={`${Routes.SEARCH}/:keyword`}>
+          <Route exact path={`${Routes.SEARCH}/:keyword`}>
             <SearchOverview />
           </Route>
-          <Route path={`${Routes.USER_LIST}/search/:keyword`}>
+          <Route path={`/page/:page`}>
+            <Overview />
+          </Route>
+          <Route path={`${Routes.SEARCH}/:keyword/page/:page`}>
+            <SearchOverview />
+          </Route>
+          <Route path={`${Routes.USER_LIST}/page/:page`}>
             {user && <AdminUser />}
             {role && !role.isAdmin && <Redirect to={Routes.INDEX} />}
             {!user && <Redirect to={Routes.INDEX} />}
           </Route>
-          <Route path={`${Routes.PRODUCT_LIST}/search/:keyword`}>
+          <Route exact path={`${Routes.USER_LIST}/search/:keyword`}>
+            {user && <AdminUser />}
+            {role && !role.isAdmin && <Redirect to={Routes.INDEX} />}
+            {!user && <Redirect to={Routes.INDEX} />}
+          </Route>
+          <Route path={`${Routes.USER_LIST}/search/:keyword/page/:page`}>
+            {user && <AdminUser />}
+            {role && !role.isAdmin && <Redirect to={Routes.INDEX} />}
+            {!user && <Redirect to={Routes.INDEX} />}
+          </Route>
+          <Route path={`${Routes.PRODUCT_LIST}/page/:page`}>
+            {user && <AdminProduct />}
+            {role && !role.isAdmin && <Redirect to={Routes.INDEX} />}
+            {!user && <Redirect to={Routes.INDEX} />}
+          </Route>
+          <Route exact path={`${Routes.PRODUCT_LIST}/search/:keyword`}>
+            {user && <AdminProduct />}
+            {role && !role.isAdmin && <Redirect to={Routes.INDEX} />}
+            {!user && <Redirect to={Routes.INDEX} />}
+          </Route>
+          <Route path={`${Routes.PRODUCT_LIST}/search/:keyword/page/:page`}>
             {user && <AdminProduct />}
             {role && !role.isAdmin && <Redirect to={Routes.INDEX} />}
             {!user && <Redirect to={Routes.INDEX} />}

@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import NavBar from "../../components/Navbar"
 import Footer from '../../components/Footer';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import {doSignIn} from "../../features/authen/authSlice"
 import * as Routes from "../../router";
@@ -13,9 +13,12 @@ export default function SignIn() {
 
   const [email, setEmail]= useState('')
   const [password, setPassword]= useState('')
-  const {isLoading, message, isError} = useSelector(state => state.auth)
+  const {isLoading, message, isError, user} = useSelector(state => state.auth)
   const dispatch= useDispatch()
+  const history= useHistory()
+  const location= useLocation()
 
+  const queryLocation= location.search ? location.search.split("=")[1] : `/`
   const onSignIn = (e) =>{
     const value={
       email,
@@ -29,7 +32,10 @@ export default function SignIn() {
     if(isError){
       toast.error(message)
     }
-  }, [isError, message])
+    if(user){
+      history.push(queryLocation)
+    }
+  }, [isError, message, history, queryLocation, user])
 
   return (
     <>

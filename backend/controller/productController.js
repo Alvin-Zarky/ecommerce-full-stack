@@ -5,6 +5,7 @@ const ErrorMessage= require('../util/customErr')
 const getProduct= asyncHandler(async(req, res) =>{
 
   let query
+  let count= await Product.countDocuments({})
   if(req.query){
     query= Product.find(req.query)
   }
@@ -15,6 +16,7 @@ const getProduct= asyncHandler(async(req, res) =>{
         $options: `i` // lowercase or uppercase it's fine
       } 
     } : {}
+    count= await Product.countDocuments({ ...keyword })
     query= Product.find({...keyword})
   }
   const productQuery= query.populate({
@@ -31,9 +33,27 @@ const getProduct= asyncHandler(async(req, res) =>{
     const querySort= req.query.sort.split(',').join(' ')
     productQuery.sort(querySort)
   }
+  
+  const limit= 8
+  const pagination={}
+  const page= Number(req.query.page) || 1
+  const startPage= (page - 1) * limit
+  const pages= Math.ceil(count / limit)
+  const endPage= page * limit
+
+  if(startPage > 0){
+    pagination.prev={
+      page: page - 1
+    }
+  }
+  if(endPage < count){
+    pagination.next={
+      page: page + 1
+    }
+  }
 
   productQuery.sort({createdAt:-1})
-  const products= await productQuery
+  const products= await productQuery.skip(startPage).limit(limit)
   
   if(!products || products.length===0){
     throw new ErrorMessage(`Product not found...!`, 404)
@@ -41,7 +61,10 @@ const getProduct= asyncHandler(async(req, res) =>{
   
   res.status(200).json({ 
     success:true,
-    count: products.length,
+    pagination,
+    count,
+    page,
+    pages,
     data: products
   })
 

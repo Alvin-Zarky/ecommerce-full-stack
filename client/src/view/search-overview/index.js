@@ -2,10 +2,12 @@ import React, {useEffect} from 'react';
 import NavBar from '../../components/Navbar';
 import * as Routes from "../../router";
 import {Row, Col} from "reactstrap";
-import {Link, useParams} from "react-router-dom";
+import {Link, useParams, NavLink} from "react-router-dom";
 import Rating from '../../components/Rating';
 import Footer from '../../components/Footer';
 import Loading from "../../components/Loading"
+import {MdNavigateNext} from "react-icons/md"
+import {GrFormPrevious} from "react-icons/gr"
 import {getProduct, getProductLatest, resetError} from "../../features/product/productSlice"
 import {useSelector, useDispatch} from "react-redux"
 import '../overview/overview.scss'
@@ -15,15 +17,16 @@ import MetaHelmet from '../../components/MetaHelmet';
 export default function SearchOverview() {
 
   const {products, isLoading, isError, message} = useSelector(state => state.product)
+  const {page:pageNumber, pages, pagination} = products 
   const dispatch= useDispatch()
-  const {keyword} = useParams()
+  const {keyword, page} = useParams()
 
   useEffect(() =>{
-    dispatch(getProduct(keyword))
+    dispatch(getProduct({keyword, page}))
     dispatch(getProductLatest())
 
     return () => dispatch(resetError())
-  }, [dispatch, keyword])
+  }, [dispatch, keyword, page])
 
   return (
     <>
@@ -54,6 +57,33 @@ export default function SearchOverview() {
                 </Link>
               </Col>
             ))}
+            {!isLoading && !isError && pagination && (
+              <div className="pagination">
+              {pages > 1 && pagination.prev && (
+                <Link to={keyword ? `/search/${keyword}/page/${pagination.prev && pagination.prev.page}` : `/page/${pagination.prev && pagination.prev.page}`}>
+                  <div className="prev-page">
+                    <GrFormPrevious />
+                  </div>
+                </Link>
+              )}
+              {pages > 1 && [...Array(pages).keys()].map((val, ind) =>(
+                  <div key={val + 1}>
+                    <Link to={keyword ? `/search/${keyword}/page/${val + 1}` :`/page/${val + 1}`}>
+                      <div className={`box-number ${val + 1 === pageNumber ? 'active' : ''}`}>
+                        <span>{val + 1}</span>
+                      </div>
+                    </Link>
+                  </div>
+              ))}
+              {pages > 1 && pagination.next && (
+                <Link to={keyword ? `/search/${keyword}/page/${pagination.next && pagination.next.page}` : `/page/${pagination.next && pagination.next.page}`}>
+                  <div className="next-page">
+                    <MdNavigateNext />
+                  </div>
+                </Link>
+              )}
+            </div>
+            )}
           </Row>
         </div>
       </div>

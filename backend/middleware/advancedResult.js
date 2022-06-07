@@ -31,10 +31,11 @@ const advancedResultMiddleware= (model, populate) => async(req, res, next) =>{
   
   const pagination={}
   const pages= parseInt(req.query.page) || 1
-  const limit = parseInt(req.query.limit) || 10
+  const limit = parseInt(req.query.limit) || 5
   const countAll= await count
   const start= (pages - 1) * limit
   const end= pages * limit
+  const allPages= Math.ceil(countAll / limit)
   data.skip(start).limit(limit)
   const result= await data
 
@@ -54,6 +55,8 @@ const advancedResultMiddleware= (model, populate) => async(req, res, next) =>{
   res.advancedResult={
     success:true,
     count: countAll,
+    page: pages,
+    allPages,
     pagination,
     data: result
   }

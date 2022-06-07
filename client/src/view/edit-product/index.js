@@ -2,11 +2,13 @@ import React, {useEffect, useState} from 'react';
 import NavBar from "../../components/Navbar"
 import Footer from "../../components/Footer"
 import * as Routes from "../../router"
+import axios from "axios"
 import { Link, useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import {getProductDetail, updateProduct, resetState} from "../../features/admin-role/adminProductSlice"
 import '../edit-user-info/edit-user-info.scss'
 import './edit-product.scss'
+import {toast} from "react-toastify"
 import MetaHelmet from '../../components/MetaHelmet';
 
 export default function EditProduct() {
@@ -22,6 +24,7 @@ export default function EditProduct() {
   const [category, setCategory]= useState('')
   const [detail, setDetail]=useState('')
   const [image, setImage]= useState('')
+  const [errMsg, setErrMsg] = useState('')
 
   useEffect(() =>{
     if(!product || !product.data){
@@ -40,8 +43,13 @@ export default function EditProduct() {
       history.push(Routes.PRODUCT_LIST)
       dispatch(resetState())
     }
+
+    if(errMsg){
+      toast.error(errMsg)
+    }
     
-  }, [dispatch, product, id,isSuccess, history])
+    return () => setErrMsg('')
+  }, [dispatch, product, id,isSuccess, history, errMsg])
 
   const handleSubmit = (e) =>{
     e.preventDefault()
@@ -57,6 +65,32 @@ export default function EditProduct() {
     }
     dispatch(updateProduct({id, value}))
   }
+
+  const submitFileUploader = async(e) =>{
+    e.preventDefault()
+
+    const formData= new FormData()
+    const file= e.target.files[0]
+    formData.append('image', file)
+    if(file){
+      try{
+        const URL= "/mern/api/upload/"
+        const config={
+          headers:{
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+        const res= await axios.post(URL, formData, config)
+        setImage(res.data)
+        return res.data
+      }catch(err){
+        setImage('/images/sample.png')
+        const message = (err.response && err.response.data && err.response.data.message) || err.message || err.toString()
+        setErrMsg(message)
+      }
+    }
+  } 
+
   return (
     <>
       <MetaHelmet />
@@ -89,7 +123,7 @@ export default function EditProduct() {
               </div>
               <div>
                 <input type="text" className="width100" value={image} onChange={(e) => {setImage(e.target.value)}} required />
-                <input type="file" onChange={(e) => {setImage(e.target.value)}} className="width100" />
+                <input type="file" onChange={submitFileUploader} className="width100" />
               </div>
               <div>
                 <label>Brand</label>

@@ -2,12 +2,14 @@ import React, {useEffect} from 'react';
 import NavBar from '../../components/Navbar';
 import * as Routes from "../../router";
 import {Row, Col} from "reactstrap";
-import {Link} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import Slider from 'react-slick';
 import MetaHelmet from '../../components/MetaHelmet';
 import Rating from '../../components/Rating';
 import Footer from '../../components/Footer';
 import Loading from "../../components/Loading"
+import {MdNavigateNext} from "react-icons/md"
+import {GrFormPrevious} from "react-icons/gr"
 import {getProduct, getProductLatest} from "../../features/product/productSlice"
 import {useSelector, useDispatch} from "react-redux"
 import './overview.scss'
@@ -15,7 +17,9 @@ import './overview.scss'
 export default function Overview() {
 
   const {products, productSlice, isLoading, isError, message} = useSelector(state => state.product)
+  const {count, page:pageNumber, pages, pagination} = products
   const dispatch= useDispatch()
+  const {keyword, page} = useParams()
 
   const settings = {
     dots: false,
@@ -26,9 +30,9 @@ export default function Overview() {
   };
 
   useEffect(() =>{
-    dispatch(getProduct())
+    dispatch(getProduct({keyword, page}))
     dispatch(getProductLatest())
-  }, [dispatch])
+  }, [dispatch, keyword, page])
 
   return (
     <>
@@ -43,7 +47,7 @@ export default function Overview() {
                   <span>{val.name} ({`$ ${val.price}`})</span>
                 </div>
                 <div className='image-slide'>
-                  <img src={val.image} alt="iamge-1" />
+                  <img src={`${val.image}`} alt="iamge-1" />
                 </div>
               </div>
             </Link>
@@ -78,6 +82,31 @@ export default function Overview() {
                 </Link>
               </Col>
             ))}
+            <div className="pagination">
+              {pages > 1 && pagination.prev && (
+                <Link to={keyword ? `/search/${keyword}/page/${pagination.prev && pagination.prev.page}` : `/page/${pagination.prev && pagination.prev.page}`}>
+                  <div className="prev-page">
+                    <GrFormPrevious />
+                  </div>
+                </Link>
+              )}
+              {pages > 1 && [...Array(pages).keys()].map((val, ind) =>(
+                  <div key={val + 1}>
+                    <Link to={keyword ? `/search/${keyword}/page/${val + 1}` :`/page/${val + 1}`}>
+                      <div className={`box-number ${val + 1 === pageNumber ? 'active' : ''}`}>
+                        <span>{val + 1}</span>
+                      </div>
+                    </Link>
+                  </div>
+              ))}
+              {pages > 1 && pagination.next && (
+                <Link to={keyword ? `/search/${keyword}/page/${pagination.next && pagination.next.page}` : `/page/${pagination.next && pagination.next.page}`}>
+                  <div className="next-page">
+                    <MdNavigateNext />
+                  </div>
+                </Link>
+              )}
+            </div>
           </Row>
         </div>
       </div>

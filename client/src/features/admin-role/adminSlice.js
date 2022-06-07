@@ -12,10 +12,10 @@ const initialState={
 
 export const getDataUsers= createAsyncThunk(
   'admin/getUsers',
-  async(keyword, thunkAPI) =>{
+  async(data, thunkAPI) =>{
     try{
       const token= thunkAPI.getState().auth.user.token
-      return await userService.getData(keyword, token)
+      return await userService.getData(data, token)
     }catch(err){
       const message= (err.response && err.response.data && err.response.data.message) || err.message || err.toString()
       return thunkAPI.rejectWithValue(message)

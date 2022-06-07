@@ -12,22 +12,25 @@ import { Table } from 'reactstrap';
 import Loading from "../../components/Loading"
 import {ImCross} from "react-icons/im"
 import {Row, Col} from "reactstrap"
+import Pagination from '../../components/Pagination';
 import './admin-user.scss'
 import MetaHelmet from '../../components/MetaHelmet';
 
 export default function AdminUser() {
 
   const [search, setKeyWord] = useState('')
-  const {users, isLoading} = useSelector(state => state.admin)
+  const {users, isLoading, isError} = useSelector(state => state.admin)
+  const {count, page:pageNumber, allPages:pages, pagination} = users
   const dispatch= useDispatch()
-  const {keyword} = useParams()
+  const {keyword, page} = useParams()
+  
   const history= useHistory()
 
   useEffect(() =>{
-    dispatch(getDataUsers(keyword))
+    dispatch(getDataUsers({keyword, page}))
 
     return () => dispatch(reset())
-  }, [dispatch, keyword])
+  }, [dispatch, keyword, page])
 
   const handleDelete = (id) =>{
     if(window.confirm("Are u sure to delete this item?")){
@@ -98,10 +101,13 @@ export default function AdminUser() {
             </tbody>
           </Table>
           {isLoading && (
-                <div className="loading" style={{marginTop:"-30px"}}>
-                  <Loading />
-                </div>
-              )}
+            <div className="loading" style={{marginTop:"-30px"}}>
+              <Loading />
+            </div>
+          )}
+          <div className="page-pagination">
+            <Pagination isLoading={isLoading} isError={isError} pagination={pagination} keyword={keyword} pages={pages} pageNumber={pageNumber} ROUTE={Routes.USER_LIST} />
+          </div>
         </div>
       <Footer />
     </>

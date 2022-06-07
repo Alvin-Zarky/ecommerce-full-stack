@@ -1,13 +1,42 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import NavBar from "../../components/Navbar"
 import Footer from '../../components/Footer';
 import StepNavBar from '../../components/StepNavBar';
 import {Row, Col} from "reactstrap"
-import * as Images from "../../constant/images"
-import './place-order.scss'
+import * as Routes from "../../router"
+import { useHistory, Redirect } from 'react-router-dom';
 import MetaHelmet from '../../components/MetaHelmet';
+import { useSelector } from 'react-redux';
+import './place-order.scss'
+
 
 export default function PlaceOrder() {
+
+  const cart= useSelector(state => state.cart)
+  const {cartItems} = cart
+  const {shipping, payment} = useSelector(state => state.order)
+  const history = useHistory()
+  
+  const addDecimal= (number) =>{
+    return Math.round((number * 100) /100).toFixed(2)
+  }
+  const itemPrices= addDecimal(cartItems.reduce((acc, item) => acc + item.qty * item.price ,0).toFixed(2))
+  const shippingPrices= addDecimal(Number(itemPrices) > 100 ? 0 : 100)
+  const taxPrices= addDecimal(Number((0.15 * itemPrices)).toFixed(2))
+  const totalPrices= (Number(itemPrices) + Number(shippingPrices) + Number(taxPrices)).toFixed(2)
+  
+  const objPrice={
+    itemPrices,
+    shippingPrices,
+    taxPrices,
+    totalPrices
+  }
+  localStorage.setItem('objPrice', JSON.stringify(objPrice))
+
+  if(!payment){
+    return <Redirect to={Routes.PAYMENT} />
+  }
+
   return (
     <>
     <MetaHelmet />
@@ -23,7 +52,7 @@ export default function PlaceOrder() {
                   </div>
                   <div className="detail-shipping">
                     <div className="address">
-                      <p>Address: 10Main St. Bosten in UK</p>
+                      <p>Address: {shipping && shipping.address}</p>
                     </div>
                   </div>
                 </div>
@@ -32,7 +61,7 @@ export default function PlaceOrder() {
                     <span>Payment Method</span>
                   </div>
                   <div className="method">
-                    <span>Method: Paypal</span>
+                    <span>Method: {payment && payment}</span>
                   </div>
                 </div>
                 <div className="order-item">
@@ -40,40 +69,25 @@ export default function PlaceOrder() {
                     <span>Order Items</span>
                   </div>
                   <div className="items-order">
-                    <Row className="border-item">
-                      <Col xl="2" lg="2" md="6">
-                        <div className="image-order">
-                          <img src={Images.IMAGE_1} alt="" />
-                        </div>
-                      </Col>
-                      <Col xl="6" lg="6" md="6">
-                        <div className="title-order-item">
-                          <span>Airpod wireless Bluetooth Headphones</span>
-                        </div>
-                      </Col>
-                      <Col xl="4" lg="4" md="4">
-                        <div className="price-order">
-                          <span>1 X $ 89.99 = $ 89.99</span>
-                        </div>
-                      </Col>
-                    </Row>
-                    <Row className="border-item">
-                      <Col xl="2">
-                        <div className="image-order">
-                          <img src={Images.IMAGE_1} alt="" />
-                        </div>
-                      </Col>
-                      <Col xl="6">
-                        <div className="title-order-item">
-                          <span>Airpod wireless Bluetooth Headphones</span>
-                        </div>
-                      </Col>
-                      <Col xl="4">
-                        <div className="price-order">
-                          <span>1 X $ 89.99 = $ 89.99</span>
-                        </div>
-                      </Col>
-                    </Row>
+                    {cartItems && cartItems.map((val, ind) =>(
+                      <Row className="border-item" key={ind}>
+                        <Col xl="2" lg="2" md="6">
+                          <div className="image-order">
+                            <img src={val.image} alt="" />
+                          </div>
+                        </Col>
+                        <Col xl="6" lg="6" md="6">
+                          <div className="title-order-item">
+                            <span>{val.name}</span>
+                          </div>
+                        </Col>
+                        <Col xl="4" lg="4" md="4">
+                          <div className="price-order">
+                            <span>{val.qty} X $ {val.price} = $ {Number(val.qty) * Number(val.price)}</span>
+                          </div>
+                        </Col>
+                      </Row>
+                    ))}
                   </div>
                 </div>
               </Col>
@@ -88,7 +102,7 @@ export default function PlaceOrder() {
                         <span>Items</span>
                       </Col>
                       <Col xl="6" lg="6" md="6">
-                        <span>$ 198.78</span>
+                        <span>$ {itemPrices}</span>
                       </Col>
                     </Row>
                   </div>
@@ -98,7 +112,7 @@ export default function PlaceOrder() {
                         <span>Shipping</span>
                       </Col>
                       <Col xl="6" lg="6" md="6">
-                        <span>$ 0</span>
+                        <span>$ {shippingPrices}</span>
                       </Col>
                     </Row>
                   </div>
@@ -108,7 +122,7 @@ export default function PlaceOrder() {
                         <span>Tax</span>
                       </Col>
                       <Col xl="6" lg="6" md="6">
-                        <span>$ 198.78</span>
+                        <span>$ {taxPrices}</span>
                       </Col>
                     </Row>
                   </div>
@@ -118,7 +132,7 @@ export default function PlaceOrder() {
                         <span>Total</span>
                       </Col>
                       <Col xl="6" lg="6" md="6">
-                        <span>$ 198.78</span>
+                        <span>$ {totalPrices}</span>
                       </Col>
                     </Row>
                   </div>

@@ -3,13 +3,13 @@ import axios from "axios"
 const URL= "/mern/api/admin/user/"
 const URL_USER= "/mern/api/admin/user"
 
-const getData= async(keyword='', token) =>{
+const getData= async({keyword='', page=''}, token) =>{
   const config={
     headers:{
       Authorization: `Bearer ${token}`
     }
   }
-  const res= await axios.get(`${URL_USER}?keyword=${keyword}`, config)
+  const res= await axios.get(`${URL_USER}?keyword=${keyword}&page=${page}`, config)
   return res.data
 }
 

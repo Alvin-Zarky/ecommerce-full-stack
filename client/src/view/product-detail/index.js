@@ -193,9 +193,9 @@ export default function ProductDetail() {
                 )}
               </div>
               <div className="btn-add-to-cart">
-                <form onSubmit={proceedCart}>
-                  <button>Add to cart</button>
-                </form>
+              <button onClick={proceedCart}>Add to cart</button>
+                {/* <form> */}
+                {/* </form> */}
               </div>
               </div>
             </Col>

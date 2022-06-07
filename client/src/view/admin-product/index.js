@@ -11,22 +11,24 @@ import Loading from "../../components/Loading"
 import {getProductData, deleteProductData, resetProduct} from "../../features/admin-role/adminProductSlice"
 import * as Routes from "../../router";
 import MetaHelmet from "../../components/MetaHelmet"
+import Pagination from '../../components/Pagination';
 import '../admin-user/admin-user.scss';
 import './admin-product.scss';
 
 export default function AdminProduct() {
 
   const [search, setSearch] = useState('')
-  const {products, isLoading} = useSelector(state => state.adminProduct)
+  const {products, isLoading, isError} = useSelector(state => state.adminProduct)
+  const {allPages:pages, count, pagination, page:pageNumber} = products
   const dispatch= useDispatch()
-  const {keyword} = useParams()
+  const {keyword, page} = useParams()
   const history = useHistory()
 
   useEffect(() =>{
-    dispatch(getProductData(keyword))
+    dispatch(getProductData({keyword, page}))
 
     return () => dispatch(resetProduct())
-  }, [dispatch, keyword])
+  }, [dispatch, keyword, page])
 
   const handleDelete= async (id) =>{
     if(window.confirm("Are u sure to delete this product?")){
@@ -108,6 +110,9 @@ export default function AdminProduct() {
               <Loading />
             </div>
           )}
+          <div className="page-pagination">
+            <Pagination isLoading={isLoading} isError={isError} pagination={pagination} keyword={keyword} pages={pages} pageNumber={pageNumber} ROUTE={Routes.PRODUCT_LIST} />
+          </div>
         </div>
       <Footer />
     </>

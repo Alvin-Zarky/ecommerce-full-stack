@@ -3,9 +3,9 @@ import axios from "axios"
 const URL= `/mern/api/product/`
 const URL_PRODUCT= `/mern/api/product`
 
-const getData = async(keyword='') =>{
-  
-  const res = await axios.get(`${URL_PRODUCT}?keyword=${keyword}`)
+const getData = async({keyword='', page=''}) =>{
+
+  const res = await axios.get(`${URL_PRODUCT}?keyword=${keyword}&page=${page}`)
   return res.data
 }
 
