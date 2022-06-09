@@ -109,7 +109,7 @@ export default function ShoppingCart() {
                   </span>
                 </div>
                 {!user && (
-                  <Link to={`${Routes.SIGN_IN}?redirect=shipping`}>
+                  <Link className={`${cartItems.length===0 ? `disabled` : `` }`} to={`${Routes.SIGN_IN}?redirect=shipping`}>
                     <button className="btn-procceed">
                       Proceed to checkout
                     </button>

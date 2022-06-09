@@ -1,23 +1,70 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import NavBar from "../../components/Navbar"
 import Footer from "../../components/Footer"
 import { Table } from 'reactstrap';
 import {ImCross} from "react-icons/im"
-import { Link } from 'react-router-dom';
+import {TiTick} from "react-icons/ti"
+import {Row, Col} from "reactstrap"
+import { Link, useParams, useHistory } from 'react-router-dom';
+import {useSelector, useDispatch} from "react-redux"
 import * as Routes from "../../router";
 import '../admin-user/admin-user.scss';
 import './admin-order.scss'
 import MetaHelmet from '../../components/MetaHelmet';
+import {getDataOrders, reset} from "../../features/admin-role/orderSlice"
+import Pagination from "../../components/Pagination"
+import Loading from '../../components/Loading';
 
 export default function AdminOrder() {
+
+  const [keySearch, setKeySearch] = useState('')
+  const {orders, isLoading} = useSelector(state => state.adminOrder)
+  const { isError, pagination, page:pageNumber, allPages} = orders
+  const dispatch= useDispatch()
+  const history = useHistory()
+  const {keyword, page} = useParams()
+
+  useEffect(() =>{
+    dispatch(getDataOrders({keyword, page}))
+
+    return () => dispatch(reset())
+  }, [dispatch, page, keyword])
+
+  const handleSearch = (e) =>{
+    
+    if(keySearch.trim()){
+      history.push(`${Routes.ORDER_LIST}/search/${keySearch}`)
+    }else{
+      history.push(Routes.ORDER_LIST)
+    }
+
+    e.preventDefault()
+  }
+
   return (
     <>
       <MetaHelmet />
       <NavBar />
         <div className="maximum-width-page">
-          <div className="title-overview">
-            <span>Orders</span>
-          </div>
+          <Row>
+            <Col xl="6" lg="6" md="6">
+              <div className="title-overview">
+                <span>Orders</span>
+              </div>
+            </Col>
+            <Col xl="6" lg="6" md="6">
+              <form onSubmit={handleSearch}>
+                <div className="input-search marginb20">
+                  <div className="input-type">
+                    <input type="text" value={keySearch} onChange={(e) => {setKeySearch(e.target.value)}} spellCheck="false" />
+                  </div>
+                  <div className="btn-search">
+                    <button>Search</button>
+                  </div>
+                </div>
+              </form>
+            </Col>
+          </Row>
           <Table className="table-content" striped bordered hover>
             <thead>
               <tr>
@@ -30,34 +77,33 @@ export default function AdminOrder() {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>Alvin</td>
-                <td>2022-05-26</td>
-                <td>$ 218.28</td>
-                <td>2022-05-27</td>
-                <td><ImCross className="cross-icon" /></td>
-                <td>
-                  <Link to={`${Routes.DETAIL_ORDER}/1`}>
-                    <button className="btn-detail">Details</button>
-                  </Link>
-                </td>
-              </tr>
-              <tr>
-                <td>1</td>
-                <td>Alvin</td>
-                <td>2022-05-26</td>
-                <td>$ 218.28</td>
-                <td>2022-05-27</td>
-                <td><ImCross className="cross-icon" /></td>
-                <td>
-                  <Link to={`${Routes.DETAIL_ORDER}/1`}>
-                    <button className="btn-detail">Details</button>
-                  </Link>
-                </td>
-              </tr>
+              {orders.data && orders.data.map((val, ind) =>(
+                <tr key={ind}>
+                  <td>{val._id}</td>
+                  <td>{val.user.name}</td>
+                  <td>{new Date(val.createdAt).toLocaleString('en-US', 'utf-8')}</td>
+                  <td>$ {(val.totalPrice).toFixed(2)}</td>
+                  <td>{!val.paidAt && `2022-06-05`}</td>
+                  <td>{!val.isDeliver ? <ImCross className="cross-icon" /> : <TiTick className="tick-icon" />}</td>
+                  <td>
+                    <Link to={`${Routes.ADMIN_ORDER_DETAIL}/${val._id}`}>
+                      <button className="btn-detail">Details</button>
+                    </Link>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </Table>
+            {isLoading && (
+              <div className="loading" style={{marginTop:"-30px"}}>
+                <Loading />
+              </div>
+            )}
+          <>
+            <div className="pagination-padd">
+              <Pagination isLoading={isLoading} isError={isError} pagination={pagination} keyword={keyword} pages={allPages} pageNumber={pageNumber} ROUTE={Routes.ORDER_LIST}  />
+            </div>
+          </>
         </div>
       <Footer />
     </>

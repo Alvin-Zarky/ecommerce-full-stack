@@ -23,3 +23,10 @@
     }
   }
 }
+.pagination-padd{
+  margin-top: -17px;
+  margin-bottom: 20px;
+  .pagination{
+    padding-left: 0 !important;
+  }
+}

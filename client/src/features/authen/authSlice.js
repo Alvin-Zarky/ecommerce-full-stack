@@ -3,14 +3,16 @@ import { authService } from "./authService"
 
 const initialState={
   user:JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')) : null,
+  order:[],
   isLoading:false,
+  isPending:false,
   isError:false,
   isSucceed:false,
   message: ''
 }
 
 export const doSignUp = createAsyncThunk(
-  'auth-signUp',
+  'auth/auth-signUp',
   async(data, thunkAPI) =>{
     try{
       return await authService.signUp(data)
@@ -22,7 +24,7 @@ export const doSignUp = createAsyncThunk(
 )
 
 export const doSignIn = createAsyncThunk(
-  'auth-signIn',
+  'auth/auth-signIn',
   async(data, thunkAPI) =>{
     try{
       return await authService.signIn(data)
@@ -34,18 +36,31 @@ export const doSignIn = createAsyncThunk(
 )
 
 export const doSignOut= createAsyncThunk(
-  'auth-signOut',
+  'auth/auth-signOut',
   async(_, thunkAPI) =>{
     return await authService.signOut()
   }
 )
 
 export const updateProfile= createAsyncThunk(
-  'auth-updateUser',
+  'auth/auth-updateUser',
   async(data, thunkAPI) =>{
     try{
       const token= thunkAPI.getState().auth.user.token
       return await authService.updateUserProfile(data, token)
+    }catch(err){
+      const message= (err.response && err.response.data && err.response.data.message) || err.message || err.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
+export const getUserOrdering = createAsyncThunk(
+  'auth/user-ordering',
+  async(data, thunkAPI) =>{
+    try{
+      const token= thunkAPI.getState().auth.user.token
+      return await authService.getOrderByUser(data, token)
     }catch(err){
       const message= (err.response && err.response.data && err.response.data.message) || err.message || err.toString()
       return thunkAPI.rejectWithValue(message)
@@ -61,6 +76,9 @@ const authSlice= createSlice({
     resetMessage: (state, action) =>{
       state.isSucceed=false
       state.message=''
+    },
+    resetOrder: (state, action) =>{
+      state.order=[]
     }
   },
   extraReducers: (builder) =>{
@@ -127,8 +145,21 @@ const authSlice= createSlice({
       state.message= action.payload
     })
 
+    //Get user ordering
+    builder.addCase(getUserOrdering.pending, (state, action) =>{
+      state.isPending=true
+    })
+    builder.addCase(getUserOrdering.fulfilled, (state, action) =>{
+      state.isPending=false
+      state.order=action.payload
+    })
+    builder.addCase(getUserOrdering.rejected, (state, action) =>{
+      state.isPending=false
+      state.isError=true
+      state.message= action.payload
+    })
   }
 })
 
-export const { reset, resetMessage } = authSlice.actions
+export const { reset, resetMessage, resetOrder } = authSlice.actions
 export default authSlice.reducer

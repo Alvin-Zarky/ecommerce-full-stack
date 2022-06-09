@@ -1,5 +1,6 @@
 import axios from "axios"
 
+const URL= "/mern/api/order/"
 const sendShipping = async (data) =>{
   if(data){
     localStorage.setItem('shipping', JSON.stringify(data))
@@ -14,9 +15,33 @@ const sendPayment = async (data) =>{
   return data
 }
 
+const sendOrder = async (data, token) =>{
+  const config={
+    headers:{
+      Authorization: `Bearer ${token}`
+    }
+  }
+
+  const res= await axios.post(URL, data, config)
+  return res.data
+}
+
+const getOrder = async (id, token) =>{
+  const config={
+    headers:{
+      Authorization: `Bearer ${token}`
+    }
+  }
+  
+  const res= await axios.get(URL + id, config)
+  return res.data
+}
+
 const orderService= {
   sendShipping,
-  sendPayment
+  sendPayment,
+  sendOrder,
+  getOrder
 }
 
 export default orderService

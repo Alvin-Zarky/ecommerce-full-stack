@@ -6,17 +6,27 @@ import {Row, Col} from "reactstrap"
 import * as Routes from "../../router"
 import { useHistory, Redirect } from 'react-router-dom';
 import MetaHelmet from '../../components/MetaHelmet';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import {submitOrder} from "../../features/order/checkOutSlice"
+import {resetCart} from "../../features/cart/cartSlice"
 import './place-order.scss'
-
 
 export default function PlaceOrder() {
 
   const cart= useSelector(state => state.cart)
+  const {user} = useSelector(state => state.auth)
+  const {shipping, payment, order} = useSelector(state => state.order)
   const {cartItems} = cart
-  const {shipping, payment} = useSelector(state => state.order)
+  const dispatch= useDispatch()
   const history = useHistory()
-  
+
+  useEffect(() =>{
+    if(order._id){
+      history.push(`${Routes.DETAIL_ORDER}/${order._id}`)
+    }
+    
+  }, [order, history,cartItems])
+
   const addDecimal= (number) =>{
     return Math.round((number * 100) /100).toFixed(2)
   }
@@ -24,14 +34,19 @@ export default function PlaceOrder() {
   const shippingPrices= addDecimal(Number(itemPrices) > 100 ? 0 : 100)
   const taxPrices= addDecimal(Number((0.15 * itemPrices)).toFixed(2))
   const totalPrices= (Number(itemPrices) + Number(shippingPrices) + Number(taxPrices)).toFixed(2)
-  
-  const objPrice={
-    itemPrices,
-    shippingPrices,
-    taxPrices,
-    totalPrices
+
+  const handleSubmitOrder = () =>{  
+    const data={
+      user: user._id,
+      orderItems: cartItems,
+      shippingAddress: shipping,
+      paymentMethod: payment,
+      taxPrice:taxPrices,
+      shippingPrice: shippingPrices,
+      totalPrice: totalPrices
+    }
+    dispatch(submitOrder(data))
   }
-  localStorage.setItem('objPrice', JSON.stringify(objPrice))
 
   if(!payment){
     return <Redirect to={Routes.PAYMENT} />
@@ -83,7 +98,7 @@ export default function PlaceOrder() {
                         </Col>
                         <Col xl="4" lg="4" md="4">
                           <div className="price-order">
-                            <span>{val.qty} X $ {val.price} = $ {Number(val.qty) * Number(val.price)}</span>
+                            <span>{val.qty} X $ {val.price} = $ {(Number(val.qty) * Number(val.price)).toFixed(2)}</span>
                           </div>
                         </Col>
                       </Row>
@@ -137,9 +152,7 @@ export default function PlaceOrder() {
                     </Row>
                   </div>
                 </div>
-                <form>
-                  <button className="btn-delivered">Place Order</button>
-                </form>
+                  <button onClick={handleSubmitOrder} className="btn-delivered">Place Order</button>
               </Col>
             </Row>
       </div>

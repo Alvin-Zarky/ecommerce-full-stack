@@ -2,6 +2,7 @@ const express= require('express')
 const router= express.Router()
 const User= require('../model/User')
 const Product = require('../model/Product')
+const Order = require("../model/Order")
 const {authMiddleware, roleUser}= require('../middleware/authMiddleware')
 const advancedResultMiddleware= require('../middleware/advancedResult')
 const {
@@ -13,7 +14,8 @@ const {
   getProductDetail,
   createProduct,
   updateProduct,
-  deleteProducts
+  deleteProducts,
+  getAllOrder
 } = require('../controller/adminController')
 
 router.use(authMiddleware)
@@ -28,5 +30,11 @@ router.route('/product').get(advancedResultMiddleware(Product, {
   model:'User'
 }), getProducts).post(createProduct)
 router.route('/product/:id').get(getProductDetail).put(updateProduct).delete(deleteProducts)
+
+router.route('/order').get(advancedResultMiddleware(Order, {
+  path:'user',
+  model:'User',
+  select:'name email'
+}) ,getAllOrder)
 
 module.exports= router

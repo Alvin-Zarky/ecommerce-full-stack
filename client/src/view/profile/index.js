@@ -3,13 +3,16 @@ import NavBar from "../../components/Navbar"
 import Footer from "../../components/Footer"
 import {Row, Col, Table} from "reactstrap"
 import {TiTick} from "react-icons/ti"
-import {Link} from "react-router-dom"
+import {ImCross} from "react-icons/im"
+import {Link, useParams} from "react-router-dom"
 import {useDispatch, useSelector} from "react-redux"
 import {updateProfile} from "../../features/authen/authSlice"
-import { resetMessage } from '../../features/authen/authSlice';
+import { resetMessage, resetOrder, getUserOrdering } from '../../features/authen/authSlice';
 import * as Routes from "../../router"
 import './profile.scss'
 import MetaHelmet from '../../components/MetaHelmet';
+import Loading from "../../components/Loading"
+import Pagination from "../../components/Pagination"
 
 export default function MyProfile() {
   
@@ -19,12 +22,19 @@ export default function MyProfile() {
   const [password, setPassword]= useState('')
   const [confirmPassword, setCfPassword]= useState('')
   const [errMessage, setErrMessage]= useState(null)
-  const {isLoading, message, isSucceed, isError} = useSelector(state => state.auth)
+  const {isLoading,isPending, message, isSucceed, isError, order} = useSelector(state => state.auth)
+  const {pagination, pageNumber, pages} = order
+  const {page} = useParams()
   const dispatch= useDispatch()
 
   useEffect(() =>{
-    return () => dispatch(resetMessage())
-  }, [dispatch])
+    dispatch(getUserOrdering({page}))
+
+    return () => {
+      dispatch(resetOrder())
+      dispatch(resetMessage())
+    }
+  }, [dispatch, page])
 
   const handleUpdate = async (e) =>{
     e.preventDefault()
@@ -110,19 +120,29 @@ export default function MyProfile() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>4729D283728B2927fh272</td>
-                    <td>2022-09-22</td>
-                    <td>$ 214.58</td>
-                    <td><TiTick className="tick-svg" /></td>
-                    <td>
-                      <Link to={`${Routes.DETAIL_ORDER}/1`}>
-                        <button className="btn-deliver">Details</button>
-                      </Link>
-                    </td>
-                  </tr>
+                  {!isPending && order.data && order.data.map((val, ind) =>(
+                    <tr key={ind}>
+                      <td>{val._id}</td>
+                      <td>{new Date(val.createdAt).toLocaleString('en-US')}</td>
+                      <td>$ {(val.totalPrice).toFixed(2)}</td>
+                      <td>{val.isPaid ? <TiTick className="tick-svg" /> : <ImCross className="cross-icon" />}</td>
+                      <td>
+                        <Link to={`${Routes.DETAIL_ORDER}/${val._id}`}>
+                          <button className="btn-deliver">Details</button>
+                        </Link>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </Table>
+              {isPending && (
+                <div className="loading" style={{marginTop:"10px"}}>
+                  <Loading />
+                </div>
+              )}
+              <div className="pagination">
+                <Pagination isLoading={isPending} isError={isError} pagination={pagination} pages={pages} pageNumber={pageNumber} ROUTE={Routes.PROFILE} />
+              </div>
               </div>
             </Col>
           </Row>

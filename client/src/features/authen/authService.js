@@ -3,6 +3,7 @@ import axios from "axios"
 const URL_SIGN_UP= '/mern/api/user/register/'
 const URL_SIGN_IN= '/mern/api/user/'
 const URL_UPDATE_PROFILE= '/mern/api/user/profile/'
+const URL_GET_ORDER= '/mern/api/user/order'
 
 const signUp = async (data) =>{
   const res= await axios.post(URL_SIGN_UP, data)
@@ -40,9 +41,21 @@ const updateUserProfile = async (data, token) =>{
   return res.data
 }
 
+const getOrderByUser = async (data,token) =>{
+  const config={
+    headers:{
+      Authorization: `Bearer ${token}`
+    }
+  }
+
+  const res= await axios.get(`${URL_GET_ORDER}?page=${data.page}`, config)
+  return res.data
+} 
+
 export const authService={
   signUp,
   signIn,
   signOut,
-  updateUserProfile
+  updateUserProfile,
+  getOrderByUser
 }

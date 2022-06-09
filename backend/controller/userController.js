@@ -1,5 +1,6 @@
 const asyncHandler= require('express-async-handler')
 const User = require('../model/User')
+const Order= require("../model/Order")
 const bcryptjs= require('bcryptjs')
 const ErrorMessage = require('../util/customErr')
 const jwt= require('jsonwebtoken')
@@ -148,6 +149,52 @@ const updateProfileUser= asyncHandler(async(req, res) =>{
     }
 })
 
+const getUserOrder = asyncHandler(async(req, res) =>{
+    
+    if(!req.user){
+        throw new ErrorMessage(`User does not exist...!`, 400)
+    }
+    if(!req.user.id){
+        throw new ErrorMessage(`User not authorize...!`, 401)
+    }
+    const query = Order.find({user: req.user.id}).populate({
+        path:'user',
+        select:'name email',
+        model:'User'
+    }).sort({createdAt: -1})
+    
+    const pageNumber= Number(req.query.page) || 1
+    const limit= Number(req.query.limit) || 5
+    const pagination={}
+    const startPage= (pageNumber - 1) * limit
+    const countAllData= await Order.countDocuments({user: req.user._id})
+    const end= pageNumber * limit
+    const pages= countAllData / limit
+
+    const order= await query.skip(startPage).limit(limit)
+    if(!order || order.length===0){
+        throw new ErrorMessage(`User order not found...!`, 400)
+    }
+    if(startPage > 0){
+        pagination.prev={
+            page: pageNumber - 1
+        }
+    }
+    if(end < countAllData){
+        pagination.next={
+            page: pageNumber + 1
+        }
+    }
+    res.status(200).json({
+        success:true,
+        pages,
+        total: countAllData,
+        pageNumber,
+        pagination,
+        data: order
+    })
+})
+
 const generateToken = (id) =>{
     return jwt.sign({id}, process.env.JWT_SECRET, {expiresIn: process.env.EPXIRE_IN})
 }
@@ -157,5 +204,6 @@ module.exports= {
     registerUser,
     logInUser,
     logOutUser,
-    updateProfileUser
+    updateProfileUser,
+    getUserOrder
 }

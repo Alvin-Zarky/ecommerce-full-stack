@@ -26,13 +26,13 @@ export default function EditUserInfo() {
       setAdmin(user.data.isAdmin)
     }
     
-    
   }, [dispatch, id, user])
   
   const handleSubmit= async (e) =>{
     e.preventDefault()
 
-    dispatch(updateUserDetail({id, value: { name: userName, email: userEmail, isAdmin }}))
+    const role= isAdmin ? "admin" : "user"
+    dispatch(updateUserDetail({id, value: { name: userName, email: userEmail, isAdmin, role }}))
   }
 
   return (

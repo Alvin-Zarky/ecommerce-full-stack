@@ -11,6 +11,12 @@
       text-transform: uppercase;
     }
   }
+  .box-not-paid{
+    background-color: rgb(211, 64, 64) !important;
+    span{
+      color:white !important;
+    }
+  }
   .shipping{
     padding-left: 20px;
     border-bottom: 1px solid #ddd;
@@ -120,5 +126,4 @@
     color:white;
     letter-spacing: 1px;
   }
-  
 }

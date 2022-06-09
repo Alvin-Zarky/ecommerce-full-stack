@@ -5,7 +5,8 @@ const {
     registerUser,
     logInUser,
     logOutUser,
-    updateProfileUser
+    updateProfileUser,
+    getUserOrder
 } = require('../controller/userController')
 const {authMiddleware} = require('../middleware/authMiddleware')
 
@@ -13,5 +14,6 @@ router.route('/profile').get(authMiddleware, getUser).put(authMiddleware, update
 router.post('/register', registerUser)
 router.post('/', logInUser)
 router.get('/logout', authMiddleware, logOutUser)
+router.get('/order', authMiddleware, getUserOrder)
 
 module.exports= router

@@ -22,6 +22,7 @@ import Payment from "./view/payment"
 import PlaceOrder from "./view/place-order"
 import SearchOverview from "./view/search-overview"
 import MetaHelmet from './components/MetaHelmet';
+import AdminOrderDetail from './view/admin-order-detail'
 
 function App() {
   
@@ -45,7 +46,11 @@ function App() {
             {!user && <SignUp />}
             {user && <Redirect to={Routes.INDEX} />}
           </Route>
-          <Route path={Routes.PROFILE}>
+          <Route exact path={Routes.PROFILE}>
+            {user && <MyProfile />}
+            {!user && <Redirect to={Routes.INDEX} />}
+          </Route>
+          <Route path={`${Routes.PROFILE}/page/:page`}>
             {user && <MyProfile />}
             {!user && <Redirect to={Routes.INDEX} />}
           </Route>
@@ -59,7 +64,7 @@ function App() {
             {role && !role.isAdmin && <Redirect to={Routes.INDEX} />}
             {!user && <Redirect to={Routes.INDEX} />}
           </Route>
-          <Route path={Routes.ORDER_LIST}>
+          <Route exact path={Routes.ORDER_LIST}>
             {user && <AdminOrder />}
             {role && !role.isAdmin && <Redirect to={Routes.INDEX} />}
             {!user && <Redirect to={Routes.INDEX} />}
@@ -67,20 +72,20 @@ function App() {
           <Route path={Routes.SHIPPING}>
             {user && <Shipping />}
             {!user && <Redirect to={Routes.INDEX} />}
-            {cartItems.length===0 && <Redirect to={Routes.CART} />}
+            {cartItems.length===0 && <Redirect to={Routes.INDEX} />}
             {/* {shipping && <Redirect to={Routes.PAYMENT} />} */}
           </Route>
           <Route path={Routes.PAYMENT}>
             {user && <Payment />}
             {!user && <Redirect to={Routes.INDEX} />}
-            {cartItems.length===0 && <Redirect to={Routes.CART} />}
+            {cartItems.length===0 && <Redirect to={Routes.INDEX} />}
             {/* {!shipping && <Redirect to={Routes.SHIPPING} />}
             {payment && <Redirect to={Routes.PLACE_ORDER} />} */}
           </Route>
           <Route path={Routes.PLACE_ORDER}>
             {user && <PlaceOrder />}
             {!user && <Redirect to={Routes.INDEX} />}
-            {cartItems.length===0 && <Redirect to={Routes.CART} />}
+            {cartItems.length===0 && <Redirect to={Routes.INDEX} />}
             {/* {!payment && <Redirect to={Routes.PAYMENT} />} */}
           </Route>
           <Route path={`${Routes.PRODUCT}/:id`}>
@@ -106,6 +111,11 @@ function App() {
           </Route>
           <Route path={`${Routes.DETAIL_ORDER}/:id`}>
             {user && <OrderDetail />}
+            {!user && <Redirect to={Routes.INDEX} />}
+          </Route>
+          <Route path={`${Routes.ADMIN_ORDER_DETAIL}/:id`}>
+            {user && <AdminOrderDetail />}
+            {role && !role.isAdmin && <Redirect to={Routes.INDEX} />}
             {!user && <Redirect to={Routes.INDEX} />}
           </Route>
           <Route exact path={`${Routes.SEARCH}/:keyword`}>
@@ -144,6 +154,21 @@ function App() {
           </Route>
           <Route path={`${Routes.PRODUCT_LIST}/search/:keyword/page/:page`}>
             {user && <AdminProduct />}
+            {role && !role.isAdmin && <Redirect to={Routes.INDEX} />}
+            {!user && <Redirect to={Routes.INDEX} />}
+          </Route>
+          <Route path={`${Routes.ORDER_LIST}/page/:page`}>
+            {user && <AdminOrder />}
+            {role && !role.isAdmin && <Redirect to={Routes.INDEX} />}
+            {!user && <Redirect to={Routes.INDEX} />}
+          </Route>
+          <Route exact path={`${Routes.ORDER_LIST}/search/:keyword`}>
+            {user && <AdminOrder />}
+            {role && !role.isAdmin && <Redirect to={Routes.INDEX} />}
+            {!user && <Redirect to={Routes.INDEX} />}
+          </Route>
+          <Route path={`${Routes.ORDER_LIST}/search/:keyword/page/:page`}>
+            {user && <AdminOrder />}
             {role && !role.isAdmin && <Redirect to={Routes.INDEX} />}
             {!user && <Redirect to={Routes.INDEX} />}
           </Route>

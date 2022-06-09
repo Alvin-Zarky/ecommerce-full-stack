@@ -3,6 +3,7 @@ const ErrorMessage= require('../util/customErr')
 const bcryptjs= require('bcryptjs')
 const User= require('../model/User')
 const Product= require('../model/Product')
+const Order= require("../model/Order")
 
 const getUsers = asyncHandler(async(req, res) =>{
   
@@ -193,6 +194,20 @@ const deleteProducts= asyncHandler(async(req, res) =>{
   res.status(200).json({success:true, data: deleteProduct})
 })
 
+const getAllOrder= asyncHandler(async(req, res) =>{
+  if(!req.user){
+    throw new ErrorMessage(`User does not exist...!`, 400)
+  }
+  if(!req.user.id){
+    throw new ErrorMessage(`User not authorize...!`, 401)
+  }
+  
+  if(!res.advancedResult.data || res.advancedResult.data.length===0){
+    throw new ErrorMessage(`Order data not found...!`, 400)
+  }
+  res.status(200).json(res.advancedResult)
+})
+
 module.exports={
   getUsers,
   getSingleUser,
@@ -202,5 +217,6 @@ module.exports={
   getProductDetail,
   createProduct,
   updateProduct,
-  deleteProducts
+  deleteProducts,
+  getAllOrder
 }

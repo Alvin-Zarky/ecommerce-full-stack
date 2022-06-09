@@ -7,6 +7,7 @@ const addProductToCart = async (data) =>{
   if(res.data){
     const value={
       ...res.data.data,
+      product: data.id, 
       qty: Number(data.qty)
     }
     return value

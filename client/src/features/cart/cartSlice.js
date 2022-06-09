@@ -3,7 +3,6 @@ import cartService from "./cartService"
 
 const initialState={
   cartItems: localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) : [],
-  calculatePrice: localStorage.getItem('objPrice')? JSON.parse(localStorage.getItem('objPrice')) : {},
   isLoading:false,
   isSuccess:false,
   isError:false,
@@ -38,7 +37,10 @@ const cartSlice= createSlice({
   name:'cart',
   initialState,
   reducers:{
-    reset:(state, action) => initialState
+    reset:(state, action) => initialState,
+    resetCart:(state, action) =>{
+      state.cartItems=[]
+    }
   },
   extraReducers:(builder) =>{
     
@@ -66,9 +68,6 @@ const cartSlice= createSlice({
 
     builder.addCase(removeFromCart.fulfilled, (state, action) =>{
       state.cartItems= state.cartItems.filter(val => val._id !== action.payload.data._id)
-      // state.cartItems= state.cartItems.filter(val => {
-      //   return val._id !== action.payload.data._id
-      // })
     })
     builder.addCase(removeFromCart.rejected, (state, action) =>{
       state.isError=true
@@ -78,6 +77,6 @@ const cartSlice= createSlice({
   }
 })
 
-export const {reset}= cartSlice.actions
+export const {reset, resetCart} = cartSlice.actions
 export default cartSlice.reducer
 

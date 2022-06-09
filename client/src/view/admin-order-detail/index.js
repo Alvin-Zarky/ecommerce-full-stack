@@ -7,14 +7,15 @@ import {useSelector, useDispatch} from "react-redux"
 import {getResultOrder, resetOrder} from "../../features/order/checkOutSlice"
 import {resetCart} from "../../features/cart/cartSlice"
 import MetaHelmet from "../../components/MetaHelmet"
-import './order-detail.scss'
+import './admin-order-detail.scss'
 
-export default function OrderDetail() {
+export default function AdminOrderDetail() {
   
   const {order} = useSelector(state => state.order)
   const {user}= useSelector(state => state.auth)
   const dispatch= useDispatch()
   const {id} = useParams()
+  const role= localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null
   
   useEffect(() =>{
     dispatch(getResultOrder(id))
@@ -150,6 +151,9 @@ export default function OrderDetail() {
                     </Row>
                   </div>
                 </div>
+                <form>
+                  {role && role.isAdmin && <button className="btn-delivered">Mark as delivered</button>}
+                </form>
               </Col>
             </Row>
         </div>

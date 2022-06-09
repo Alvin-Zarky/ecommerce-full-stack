@@ -15,7 +15,7 @@ export default function Shipping() {
   const shippingStorage= localStorage.getItem('shipping') ? JSON.parse(localStorage.getItem('shipping')) : ''
   const [address, setAddress] = useState(shippingStorage && shippingStorage.address)
   const [city, setCity] = useState(shippingStorage && shippingStorage.city)
-  const [postal, setPostal] = useState(shippingStorage && shippingStorage.postal)
+  const [postal, setPostal] = useState(shippingStorage && shippingStorage.postalCode)
   const [country, setCountry] = useState(shippingStorage && shippingStorage.country)
 
   const {isLoading} = useSelector(state => state.order)
@@ -26,7 +26,7 @@ export default function Shipping() {
     const data={
       address,
       city,
-      postal,
+      postalCode: postal,
       country
     }
     dispatch(submitShipping(data)).then(() => {
