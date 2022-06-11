@@ -44,9 +44,9 @@ app.get('/mern/api/config/paypal', (req, res, next) =>{
 
 //Server client
 if(process.env.NODE_ENV==='production'){
-  app.use(express.static(path.join(__dirname, '/client/build')))
+  app.use(express.static(path.join(__dirname, '../client/build')))
   
-  app.get('*', (req, res, next) =>  res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html')))
+  app.get('*', (req, res, next) =>  res.sendFile(path.resolve(__dirname, '../' ,'client', 'build', 'index.html')))
 }else{
   app.get('/mern/api', async(req, res) =>{
     res.send(`Server API is running...!`)
