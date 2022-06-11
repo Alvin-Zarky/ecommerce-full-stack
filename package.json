@@ -4,7 +4,7 @@
   "description": "Web project mern ecommerce full stack related with frontend & backend collaborate together to make a powerful web application with mern stands for MongoDb, Node.js, Express, React. This project is completely project base and include all extensive features such as advanced everything to dive deeply to mastery...! etc",
   "engines": {
     "node": "16.13.1",
-    "npm": "6.14.15"
+    "npm": "8.1.2"
   },
   "main": "backend/server.js",
   "scripts": {
