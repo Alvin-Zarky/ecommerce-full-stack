@@ -169,7 +169,7 @@ const getUserOrder = asyncHandler(async(req, res) =>{
     const startPage= (pageNumber - 1) * limit
     const countAllData= await Order.countDocuments({user: req.user._id})
     const end= pageNumber * limit
-    const pages= countAllData / limit
+    const pages= Math.ceil(countAllData / limit)
 
     const order= await query.skip(startPage).limit(limit)
     if(!order || order.length===0){

@@ -15,7 +15,8 @@ const {
   createProduct,
   updateProduct,
   deleteProducts,
-  getAllOrder
+  getAllOrder,
+  markUserOrder
 } = require('../controller/adminController')
 
 router.use(authMiddleware)
@@ -36,5 +37,6 @@ router.route('/order').get(advancedResultMiddleware(Order, {
   model:'User',
   select:'name email'
 }) ,getAllOrder)
+router.route('/order/:id/delivered').put(markUserOrder)
 
 module.exports= router

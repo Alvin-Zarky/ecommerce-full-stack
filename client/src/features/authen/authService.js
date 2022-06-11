@@ -41,14 +41,14 @@ const updateUserProfile = async (data, token) =>{
   return res.data
 }
 
-const getOrderByUser = async (data,token) =>{
+const getOrderByUser = async ({page=''},token) =>{
   const config={
     headers:{
       Authorization: `Bearer ${token}`
     }
   }
 
-  const res= await axios.get(`${URL_GET_ORDER}?page=${data.page}`, config)
+  const res= await axios.get(`${URL_GET_ORDER}?page=${page}`, config)
   return res.data
 } 
 

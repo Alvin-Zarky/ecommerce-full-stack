@@ -22,6 +22,19 @@ export const getDataOrders= createAsyncThunk(
   }
 )
 
+export const markOrderDeliver =createAsyncThunk(
+  'admin-order/mark-deliver',
+  async(id, thunkAPI) =>{
+    try{
+      const token= thunkAPI.getState().auth.user.token
+      return await orderService.deliverOrder(id, token)
+    }catch(err){
+      const message= (err.response && err.response.data && err.response.data.message) || err.message || err.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
 const adminOrderSlice= createSlice({
   name: 'admin-order',
   initialState,
@@ -35,17 +48,28 @@ const adminOrderSlice= createSlice({
     })
     builder.addCase(getDataOrders.fulfilled, (state, action) =>{
       state.isLoading=false
-      state.isSuccess=true
       state.isError=false
       state.orders = action.payload
     })
     builder.addCase(getDataOrders.rejected, (state, action) =>{
       state.isLoading=false
-      state.isSuccess=false
       state.isError=true
       state.message= action.payload
     })
     
+    builder.addCase(markOrderDeliver.pending, (state, action) =>{
+      state.isLoading=true
+    })
+    builder.addCase(markOrderDeliver.fulfilled, (state, action) =>{
+      state.isLoading=false
+      state.isSuccess=true
+    })
+    builder.addCase(markOrderDeliver.rejected, (state, action) =>{
+      state.isLoading=false
+      state.isError=true
+      state.message=action.payload
+      state.isSuccess=false
+    })
   }
 })
 

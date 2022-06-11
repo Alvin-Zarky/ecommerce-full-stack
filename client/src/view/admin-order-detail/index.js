@@ -4,7 +4,8 @@ import NavBar from "../../components/Navbar"
 import Footer from "../../components/Footer"
 import {Row, Col} from "reactstrap"
 import {useSelector, useDispatch} from "react-redux"
-import {getResultOrder, resetOrder} from "../../features/order/checkOutSlice"
+import {getResultOrder, resetOrder, resetOrderItem} from "../../features/order/checkOutSlice"
+import {markOrderDeliver} from "../../features/admin-role/orderSlice"
 import {resetCart} from "../../features/cart/cartSlice"
 import MetaHelmet from "../../components/MetaHelmet"
 import './admin-order-detail.scss'
@@ -12,13 +13,16 @@ import './admin-order-detail.scss'
 export default function AdminOrderDetail() {
   
   const {order} = useSelector(state => state.order)
+  const {isSuccess} = useSelector(state => state.adminOrder)
   const {user}= useSelector(state => state.auth)
   const dispatch= useDispatch()
   const {id} = useParams()
   const role= localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null
   
   useEffect(() =>{
-    dispatch(getResultOrder(id))
+    if(isSuccess || !isSuccess){
+      dispatch(getResultOrder(id))
+    }
 
     return () => {
       dispatch(resetCart())
@@ -27,7 +31,11 @@ export default function AdminOrderDetail() {
       localStorage.removeItem('shipping')
       localStorage.removeItem('payment')
     }
-  }, [dispatch, id])
+  }, [dispatch, id, isSuccess])
+
+  const handleSubmit = () =>{
+    dispatch(markOrderDeliver(id)).then(() => dispatch(resetOrderItem()))
+  }
 
   return (
     <>
@@ -55,12 +63,12 @@ export default function AdminOrderDetail() {
                         <p>Address: {order.shippingAddress.address}</p>
                       )}
                     </div>
-                    {order.isPaid && (
+                    {order.isDeliver && (
                       <div className="box-delivered">
-                        <span>Delivered on {order.deliveredAt}</span>
+                        <span>Delivered on {new Date(order.deliveredAt).toLocaleString('en-US')}</span>
                       </div>
                     )}
-                    {!order.isPaid && (
+                    {!order.isDeliver && (
                       <div className="box-delivered box-not-paid">
                         <span>Not Delivered</span>
                       </div>
@@ -74,8 +82,8 @@ export default function AdminOrderDetail() {
                   <div className="method">
                     <span>Method: {order.paymentMethod}</span>
                   </div>
-                  <div className={`paid-delivered ${order.isDeliver ? `` : `box-not-paid`}`}>
-                    {order.isDeliver ? <span>Paid on {order.paidAt}</span> : <span>Not paid</span>}
+                  <div className={`paid-delivered ${order.isPaid ? `` : `box-not-paid`}`}>
+                    {order.isPaid ? <span>Paid on {new Date(order.paidAt).toLocaleString('en-US')}</span> : <span>Not paid</span>}
                   </div>
                 </div>
                 <div className="order-item">
@@ -151,9 +159,7 @@ export default function AdminOrderDetail() {
                     </Row>
                   </div>
                 </div>
-                <form>
-                  {role && role.isAdmin && <button className="btn-delivered">Mark as delivered</button>}
-                </form>
+                {!order.isDeliver && role && role.isAdmin && <button className="btn-delivered" onClick={handleSubmit}>Mark as delivered</button>}
               </Col>
             </Row>
         </div>

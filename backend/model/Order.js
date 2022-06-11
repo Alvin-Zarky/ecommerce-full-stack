@@ -6,6 +6,10 @@ const orderSchema= new mongoose.Schema({
         ref:'User',
         required:true
     },
+    userName: {
+        type:String,
+        required:true
+    },
     orderItems:[
         {
             name: { type:String, required:true },
@@ -39,7 +43,7 @@ const orderSchema= new mongoose.Schema({
     },
     paymentResult:{
         id:{ type:String },
-        status: String,
+        status:{type:String},
         update_time: { type:String },
         email_address:{
             type:String

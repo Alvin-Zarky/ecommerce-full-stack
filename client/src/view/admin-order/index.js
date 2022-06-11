@@ -22,13 +22,13 @@ export default function AdminOrder() {
   const { isError, pagination, page:pageNumber, allPages} = orders
   const dispatch= useDispatch()
   const history = useHistory()
-  const {keyword, page} = useParams()
+  const {search, page} = useParams()
 
   useEffect(() =>{
-    dispatch(getDataOrders({keyword, page}))
+    dispatch(getDataOrders({search, page}))
 
     return () => dispatch(reset())
-  }, [dispatch, page, keyword])
+  }, [dispatch, page, search])
 
   const handleSearch = (e) =>{
     
@@ -80,10 +80,10 @@ export default function AdminOrder() {
               {orders.data && orders.data.map((val, ind) =>(
                 <tr key={ind}>
                   <td>{val._id}</td>
-                  <td>{val.user.name}</td>
+                  <td>{val.userName}</td>
                   <td>{new Date(val.createdAt).toLocaleString('en-US', 'utf-8')}</td>
                   <td>$ {(val.totalPrice).toFixed(2)}</td>
-                  <td>{!val.paidAt && `2022-06-05`}</td>
+                  <td>{val.paidAt ? new Date(val.paidAt).toLocaleString('en-US') : 'Not paid yet'}</td>
                   <td>{!val.isDeliver ? <ImCross className="cross-icon" /> : <TiTick className="tick-icon" />}</td>
                   <td>
                     <Link to={`${Routes.ADMIN_ORDER_DETAIL}/${val._id}`}>
@@ -101,7 +101,7 @@ export default function AdminOrder() {
             )}
           <>
             <div className="pagination-padd">
-              <Pagination isLoading={isLoading} isError={isError} pagination={pagination} keyword={keyword} pages={allPages} pageNumber={pageNumber} ROUTE={Routes.ORDER_LIST}  />
+              <Pagination isLoading={isLoading} isError={isError} pagination={pagination} keyword={search} pages={allPages} pageNumber={pageNumber} ROUTE={Routes.ORDER_LIST}  />
             </div>
           </>
         </div>

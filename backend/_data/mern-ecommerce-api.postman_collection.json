@@ -1,0 +1,1040 @@
+{
+	"info": {
+		"_postman_id": "c8c42ca3-9ef7-446e-8bb4-41e55d9aa611",
+		"name": "mern-ecommerce-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20262740"
+	},
+	"item": [
+		{
+			"name": "product",
+			"item": [
+				{
+					"name": "get-product",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": "type json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{URL}}/mern/api/product?select=name, price, brand",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"mern",
+								"api",
+								"product"
+							],
+							"query": [
+								{
+									"key": "select",
+									"value": "name, price, brand"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-product-latest",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/mern/api/product/latest",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"mern",
+								"api",
+								"product",
+								"latest"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-single-product",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{URL}}/mern/api/product/629b48e615484997eb990856",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"mern",
+								"api",
+								"product",
+								"629b48e615484997eb990856"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "post-product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": "type json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"name\": \"Hard to say, but need to move on\",\r\n        \"image\": \"/images/playstation.jpg\",\r\n        \"description\": \"Bluetooth connected it\",\r\n        \"brand\":\"Apple\",\r\n        \"category\": \"Electronic\",\r\n        \"price\": 99.99,\r\n        \"stock\": 8,\r\n        \"rating\": 2.5,\r\n        \"numReviews\": 7\r\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/mern/api/product",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"mern",
+								"api",
+								"product"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update-product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": "type json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"brand\": \"Mac IOS\"\r\n}\r\n"
+						},
+						"url": {
+							"raw": "{{URL}}/mern/api/product/628634fecf8c97e88a9b3e01",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"mern",
+								"api",
+								"product",
+								"628634fecf8c97e88a9b3e01"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "upadte-single-product",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/mern/api/product/1",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"mern",
+								"api",
+								"product",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete-product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/mern/api/product/6286067d91fa4e332b912997",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"mern",
+								"api",
+								"product",
+								"6286067d91fa4e332b912997"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "get-profile-user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/mern/api/user/profile",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"mern",
+								"api",
+								"user",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "register-user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if(pm.response.json().success){\r",
+									"   pm.environment.set(\"TOKEN\", pm.response.json().data.token)\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": "type json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"alvin\",\r\n    \"email\": \"alvin@gmail.com\",\r\n    \"password\": \"alvin123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/mern/api/user/register",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"mern",
+								"api",
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login-user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if(pm.response.json().success){\r",
+									"   pm.environment.set(\"TOKEN\", pm.response.json().data.token)\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"yago@gmail.com\",\r\n    \"password\": \"yago123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/mern/api/user",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"mern",
+								"api",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "logout-user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if(pm.response.json().success){\r",
+									"    pm.environment.set(\"TOKEN\", null)\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/mern/api/user/logout",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"mern",
+								"api",
+								"user",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update-profile-user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": "type json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"nani\",\r\n    \"email\": \"nani@gmail.com\",\r\n    \"password\": \"nani123\"\r\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/mern/api/user/profile",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"mern",
+								"api",
+								"user",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-user-order",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/mern/api/user/order",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"mern",
+								"api",
+								"user",
+								"order"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "order",
+			"item": [
+				{
+					"name": "get-order",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/mern/api/user/order?page=1",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"mern",
+								"api",
+								"user",
+								"order"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-single-order",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/mern/api/order/62a04c1d3fe46090e788ffe5",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"mern",
+								"api",
+								"order",
+								"62a04c1d3fe46090e788ffe5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create-order",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": "type json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"orderItems\":[\r\n        {\r\n            \"name\": \"The addToCart functionality is non sensical\",\r\n            \"qty\": 4,\r\n            \"img\": \"/images/xxxx.jpg\",\r\n            \"price\": 332.33,\r\n            \"product\": \"629b48e615484997eb990856\"\r\n        }\r\n    ],\r\n    \"shippingAddress\":{\r\n        \"address\": \"10Main str\",\r\n        \"city\":\"Buston\",\r\n        \"postalCode\": 294822,\r\n        \"country\": \"USA\"\r\n    },\r\n    \"paymentMethod\": \"PayPal\",\r\n    \"taxPrice\": 45.00,\r\n    \"shippingPrice\": 0.00,\r\n    \"totalPrice\": 383.44\r\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/mern/api/order/",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"mern",
+								"api",
+								"order",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "admin",
+			"item": [
+				{
+					"name": "admin-user",
+					"item": [
+						{
+							"name": "get-all-users",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{URL}}/mern/api/admin/user?select=name, email, createdAt&page=2&keyword=ya",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"mern",
+										"api",
+										"admin",
+										"user"
+									],
+									"query": [
+										{
+											"key": "select",
+											"value": "name, email, createdAt"
+										},
+										{
+											"key": "page",
+											"value": "2"
+										},
+										{
+											"key": "keyword",
+											"value": "ya"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get-single-user",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/mern/api/admin/user/6292f4f656be4fd34e94fada",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"mern",
+										"api",
+										"admin",
+										"user",
+										"6292f4f656be4fd34e94fada"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update-all-users",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": "type json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"yana\",\r\n    \"email\": \"yana@gmail.com\",\r\n    \"role\": \"user\",\r\n    \"isAdmin\" : false,\r\n    \"currentPassword\": \"123456\",\r\n    \"newPassword\": \"yana123\"\r\n}"
+								},
+								"url": {
+									"raw": "{{URL}}/mern/api/admin/user/6292f4f656be4fd34e94fada",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"mern",
+										"api",
+										"admin",
+										"user",
+										"6292f4f656be4fd34e94fada"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete-all-users",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/mern/api/admin/user/6292f4f656be4fd34e94fada",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"mern",
+										"api",
+										"admin",
+										"user",
+										"6292f4f656be4fd34e94fada"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "admin-product",
+					"item": [
+						{
+							"name": "get-all-products",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/mern/api/admin/product?select=name, image, description&keyword=ca",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"mern",
+										"api",
+										"admin",
+										"product"
+									],
+									"query": [
+										{
+											"key": "select",
+											"value": "name, image, description"
+										},
+										{
+											"key": "keyword",
+											"value": "ca"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get-single-product",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/mern/api/admin/product/62961fda97b62c8bb75ca980",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"mern",
+										"api",
+										"admin",
+										"product",
+										"62961fda97b62c8bb75ca980"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "create-product",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": "type json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Carry on and be concentrated on your soft skills\",\r\n    \"image\": \"/images/playstation.jpg\",\r\n    \"description\": \"Bluetooth connected it\",\r\n    \"brand\":\"Xiaomi\",\r\n    \"category\": \"Electronic\",\r\n    \"price\": 76.99,\r\n    \"stock\": 4\r\n}"
+								},
+								"url": {
+									"raw": "{{URL}}/mern/api/admin/product",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"mern",
+										"api",
+										"admin",
+										"product"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update-product",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": "type json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Learning with the latest technology\",\r\n    \"category\": \"technology\"\r\n}"
+								},
+								"url": {
+									"raw": "{{URL}}/mern/api/admin/product/6294da0d96f16bba9c36ef72",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"mern",
+										"api",
+										"admin",
+										"product",
+										"6294da0d96f16bba9c36ef72"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete-all-products",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/mern/api/admin/product/629435cdfa37fd9465415a42",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"mern",
+										"api",
+										"admin",
+										"product",
+										"629435cdfa37fd9465415a42"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "admin-order",
+					"item": [
+						{
+							"name": "get-all-order",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/mern/api/admin/order",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"mern",
+										"api",
+										"admin",
+										"order"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "review",
+			"item": [
+				{
+					"name": "create-review-for-product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": "type json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"rating\": 2,\r\n    \"comments\": \"b dg vea s'oy tae b jg hah dg ot :(\"\r\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/mern/api/product/629655187fce10c2bb799b96/review",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"mern",
+								"api",
+								"product",
+								"629655187fce10c2bb799b96",
+								"review"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

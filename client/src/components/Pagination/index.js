@@ -4,7 +4,7 @@ import {GrFormPrevious} from "react-icons/gr"
 import {MdNavigateNext} from "react-icons/md"
 import './pagination.scss'
 
-export default function Pagination({isLoading, isError, pagination, keyword, pages, pageNumber, ROUTE}) {
+export default function Pagination({isLoading, isError, pagination, keyword, search, pages, pageNumber, ROUTE}) {
   return (
     <>
     {!isLoading && !isError && pagination && (

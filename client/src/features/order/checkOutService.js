@@ -37,11 +37,23 @@ const getOrder = async (id, token) =>{
   return res.data
 }
 
+const orderPay = async (data, token) =>{
+  const config={
+    headers:{
+      Authorization: `Bearer ${token}`
+    }
+  }
+
+  const res= await axios.put(URL + data.id + `/pay`, {id: data.paymentResult.id, status: data.paymentResult.status, email_address: data.paymentResult.payer.email_address, update_time: data.paymentResult.update_time}, config)
+  return res.data
+}
+
 const orderService= {
   sendShipping,
   sendPayment,
   sendOrder,
-  getOrder
+  getOrder,
+  orderPay
 }
 
 export default orderService

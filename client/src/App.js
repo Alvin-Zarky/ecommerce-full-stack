@@ -162,12 +162,12 @@ function App() {
             {role && !role.isAdmin && <Redirect to={Routes.INDEX} />}
             {!user && <Redirect to={Routes.INDEX} />}
           </Route>
-          <Route exact path={`${Routes.ORDER_LIST}/search/:keyword`}>
+          <Route exact path={`${Routes.ORDER_LIST}/search/:search`}>
             {user && <AdminOrder />}
             {role && !role.isAdmin && <Redirect to={Routes.INDEX} />}
             {!user && <Redirect to={Routes.INDEX} />}
           </Route>
-          <Route path={`${Routes.ORDER_LIST}/search/:keyword/page/:page`}>
+          <Route path={`${Routes.ORDER_LIST}/search/:search/page/:page`}>
             {user && <AdminOrder />}
             {role && !role.isAdmin && <Redirect to={Routes.INDEX} />}
             {!user && <Redirect to={Routes.INDEX} />}

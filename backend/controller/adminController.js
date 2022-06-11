@@ -208,6 +208,25 @@ const getAllOrder= asyncHandler(async(req, res) =>{
   res.status(200).json(res.advancedResult)
 })
 
+const markUserOrder= asyncHandler(async(req, res) =>{
+  if(!req.user){
+    throw new ErrorMessage(`User does not exist...!`, 400)
+  }
+  if(!req.user.id){
+    throw new ErrorMessage(`User not authorize...!`, 401)
+  }
+  const queryOrder= await Order.findById(req.params.id)
+  if(queryOrder){
+    queryOrder.isDeliver= true
+    queryOrder.deliveredAt= Date.now()
+
+    const order= await queryOrder.save()
+    res.status(200).json({ success:true, data: order })
+  }else{
+    throw new ErrorMessage(`Order not found...!`, 400)
+  }
+})
+
 module.exports={
   getUsers,
   getSingleUser,
@@ -218,5 +237,6 @@ module.exports={
   createProduct,
   updateProduct,
   deleteProducts,
-  getAllOrder
+  getAllOrder,
+  markUserOrder
 }

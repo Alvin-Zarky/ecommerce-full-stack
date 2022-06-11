@@ -5,7 +5,7 @@ import StepNavBar from '../../components/StepNavBar';
 import { useHistory } from 'react-router-dom';
 import * as Routes from "../../router"
 import MetaHelmet from '../../components/MetaHelmet';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import {submitShipping} from "../../features/order/checkOutSlice"
 import '../sign-in/sign-in.scss'
 import './shipping.scss'
@@ -18,7 +18,6 @@ export default function Shipping() {
   const [postal, setPostal] = useState(shippingStorage && shippingStorage.postalCode)
   const [country, setCountry] = useState(shippingStorage && shippingStorage.country)
 
-  const {isLoading} = useSelector(state => state.order)
   const dispatch= useDispatch()
   const history= useHistory()
 
@@ -82,8 +81,7 @@ export default function Shipping() {
                 <input type="text" value={country} onChange={(e) => {setCountry(e.target.value)}} required placeholder='Enter country' />
               </div>
             </div>
-            {isLoading && <button>Continuing...</button>}
-            {!isLoading && <button>Continue</button>}
+            <button>Continue</button>
           </form>
         </div>
       </div>

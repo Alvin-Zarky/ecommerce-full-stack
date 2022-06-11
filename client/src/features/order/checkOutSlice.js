@@ -3,6 +3,7 @@ import orderService from "./checkOutService"
 
 const getShippingFromStorage= localStorage.getItem('shipping') ? JSON.parse(localStorage.getItem('shipping')) : null
 const getPaymentFromStorage= localStorage.getItem('payment') ? JSON.parse(localStorage.getItem('payment')) : null
+const getPaidFromStorage= localStorage.getItem('isPaid') ? Boolean(localStorage.getItem('isPaid')) : false
 
 const initialState={
   shipping: getShippingFromStorage,
@@ -10,8 +11,9 @@ const initialState={
   order: {},
   isLoading:false,
   isError:false,
+  isPaid:false,
   isSuccess:false,
-  message:''
+  message:'',
 }
 
 export const submitShipping= createAsyncThunk(
@@ -64,6 +66,19 @@ export const getResultOrder= createAsyncThunk(
   }
 )
 
+export const orderPayUser = createAsyncThunk(
+  'order/order-pay',
+  async(data, thunkAPI) =>{
+    try{
+      const token= thunkAPI.getState().auth.user.token
+      return await orderService.orderPay(data, token)
+    }catch(err){
+      const message= (err.response && err.response.data && err.response.data.message) || err.message || err.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
 const orderSlice= createSlice({
   name:'order',
   initialState,
@@ -73,6 +88,10 @@ const orderSlice= createSlice({
       state.order={}
       state.shipping=null
       state.payment=null
+      state.isPaid=false
+    },
+    resetOrderItem: (state, action) =>{
+      state.order={}
     }
   },
   extraReducers:(builder) =>{
@@ -107,20 +126,41 @@ const orderSlice= createSlice({
     //Get Order
     builder.addCase(getResultOrder.pending, (state, action) =>{
       state.isLoading=true
+      state.isPaid=false
     })
     builder.addCase(getResultOrder.fulfilled, (state, action) =>{
       state.isLoading=true
       state.order= action.payload.data
-      state.isSuccess= true
+      // state.isPaid= action.payload.data.isPaid
     })
     builder.addCase(getResultOrder.rejected, (state, action) =>{
       state.isLoading=false
-      state.isSuccess=false
       state.isError=true
+      state.isPaid=false
       state.message= action.payload
+    })
+
+    //User order paid
+    builder.addCase(orderPayUser.pending, (state, action) =>{
+      state.isLoading=true
+      state.isSuccess=false
+      state.isPaid=false
+    })
+    builder.addCase(orderPayUser.fulfilled, (state, action) =>{
+      state.isLoading=false
+      state.order= action.payload.data
+      state.isSuccess=true
+      state.isPaid= true
+    })
+    builder.addCase(orderPayUser.rejected, (state, action) =>{
+      state.isLoading=false
+      state.isPaid=false
+      state.isError=true
+      state.isSuccess=false
+      state.message = action.payload
     })
   }
 })
 
-export const {reset, resetOrder} = orderSlice.actions
+export const {reset, resetOrder, resetOrderItem} = orderSlice.actions
 export default orderSlice.reducer

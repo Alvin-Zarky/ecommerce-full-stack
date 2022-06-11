@@ -1,0 +1,4 @@
+To install react paypal button-v2 you better use this command npm tool
+"npm install react-paypal-button-v2 --legacy-peer-deps" and the one was broken
+and it's known as npm i react-paypal-button-v2 cuz of the npm issue and we don't exactly
+abt what's going on with this npm package toug...

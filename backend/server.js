@@ -41,6 +41,10 @@ app.use('/mern/api/order', orderRouter)
 app.use('/mern/api/admin', adminRouter)
 app.use('/mern/api/upload', upload)
 
+app.get('/mern/api/config/paypal', (req, res, next) =>{
+  res.status(200).json({client_paypal_id: process.env.CLIENT_PAYPAL_ID})  
+})
+
 app.use((req, res, next) =>{
   res.status(404).json({
     message: `Page not found ~ ${req.originalUrl}`

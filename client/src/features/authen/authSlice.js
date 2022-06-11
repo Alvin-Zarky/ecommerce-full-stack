@@ -155,8 +155,6 @@ const authSlice= createSlice({
     })
     builder.addCase(getUserOrdering.rejected, (state, action) =>{
       state.isPending=false
-      state.isError=true
-      state.message= action.payload
     })
   }
 })

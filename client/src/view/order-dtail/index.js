@@ -1,23 +1,48 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {useParams} from "react-router-dom"
 import NavBar from "../../components/Navbar"
 import Footer from "../../components/Footer"
 import {Row, Col} from "reactstrap"
+import {PayPalButton} from "react-paypal-button-v2"
 import {useSelector, useDispatch} from "react-redux"
-import {getResultOrder, resetOrder} from "../../features/order/checkOutSlice"
+import {getResultOrder, resetOrder, resetOrderItem, orderPayUser} from "../../features/order/checkOutSlice"
 import {resetCart} from "../../features/cart/cartSlice"
 import MetaHelmet from "../../components/MetaHelmet"
+import axios from "axios"
 import './order-detail.scss'
 
 export default function OrderDetail() {
-  
-  const {order} = useSelector(state => state.order)
+
+  const [isSdk, setIsSdk] = useState(false)
+  const {order, isSuccess, isPaid} = useSelector(state => state.order)
   const {user}= useSelector(state => state.auth)
   const dispatch= useDispatch()
   const {id} = useParams()
-  
+
   useEffect(() =>{
-    dispatch(getResultOrder(id))
+
+    const asyncPayPal= async () =>{
+      const res= await axios.get('/mern/api/config/paypal')
+      const {client_paypal_id} = res.data
+      const script = document.createElement('script')
+      script.type="text/javascript"
+      script.async=true
+      script.src= `https://www.paypal.com/sdk/js?client-id=${client_paypal_id}`
+      script.onload = () =>{
+        setIsSdk(true)
+      }
+      document.body.appendChild(script)
+    }
+
+    if(isSuccess || !isSuccess){
+      dispatch(getResultOrder(id))
+    }else if(!isPaid){
+      if(!window.paypal){
+        asyncPayPal()
+      }else{
+        setIsSdk(true)
+      }
+    }
 
     return () => {
       dispatch(resetCart())
@@ -25,8 +50,17 @@ export default function OrderDetail() {
       localStorage.removeItem('cart')
       localStorage.removeItem('shipping')
       localStorage.removeItem('payment')
+      localStorage.removeItem('isPaid')
     }
-  }, [dispatch, id])
+  }, [dispatch, id, isSuccess, isPaid])
+  
+  const buttonStyles = {
+    layout: 'vertical',
+    shape: 'rect',
+  }
+  const handlePayOrder = async (paymentResult) =>{
+    dispatch(orderPayUser({id, paymentResult})).then(() => dispatch(resetOrderItem()))
+  }
 
   return (
     <>
@@ -54,12 +88,12 @@ export default function OrderDetail() {
                         <p>Address: {order.shippingAddress.address}</p>
                       )}
                     </div>
-                    {order.isPaid && (
+                    {order.isDeliver && (
                       <div className="box-delivered">
-                        <span>Delivered on {order.deliveredAt}</span>
+                        <span>Delivered on {new Date(order.deliveredAt).toLocaleString('en-US')}</span>
                       </div>
                     )}
-                    {!order.isPaid && (
+                    {!order.isDeliver && (
                       <div className="box-delivered box-not-paid">
                         <span>Not Delivered</span>
                       </div>
@@ -73,8 +107,8 @@ export default function OrderDetail() {
                   <div className="method">
                     <span>Method: {order.paymentMethod}</span>
                   </div>
-                  <div className={`paid-delivered ${order.isDeliver ? `` : `box-not-paid`}`}>
-                    {order.isDeliver ? <span>Paid on {order.paidAt}</span> : <span>Not paid</span>}
+                  <div className={`paid-delivered ${order.isPaid ? `` : `box-not-paid`}`}>
+                    {order.isPaid ? <span>Paid on {new Date(order.paidAt).toLocaleString('en-US')}</span> : <span>Not paid</span>}
                   </div>
                 </div>
                 <div className="order-item">
@@ -150,6 +184,11 @@ export default function OrderDetail() {
                     </Row>
                   </div>
                 </div>
+                {!order.isPaid && !isPaid && !isSdk && (
+                  <div className="paypal-button">
+                    <PayPalButton onSuccess={handlePayOrder} buttonStyles={buttonStyles} amount={order.totalPrice} />
+                  </div>
+                )}
               </Col>
             </Row>
         </div>

@@ -16,6 +16,16 @@ const advancedResultMiddleware= (model, populate) => async(req, res, next) =>{
     data= model.find({...keyword})
     count= model.countDocuments({...keyword})
   }
+  if(req.query.search){
+    const search= {
+      userName:{
+        $regex: req.query.search,
+        $options: `i`
+      }
+    }
+    data= model.find({...search})
+    count= model.countDocuments({...search})
+  }
   if(populate){
     data.populate(populate)
   }
