@@ -42,8 +42,8 @@ app.get('/mern/api/config/paypal', (req, res, next) =>{
   res.status(200).json({client_paypal_id: process.env.CLIENT_PAYPAL_ID})  
 })
 
-//Server client
-if(process.env.NODE_ENV==='production'){
+//Serve client
+if(process.env.NODE_ENV ===' production'){
   app.use(express.static(path.join(__dirname, '../client/build')))
   
   app.get('*', (req, res) =>  {
@@ -55,11 +55,11 @@ if(process.env.NODE_ENV==='production'){
   })
 }
 
-// app.use((req, res, next) =>{
-//   res.status(404).json({
-//     message: `Page not found ~ ${req.originalUrl}`
-//   })
-// })
+app.use((req, res, next) =>{
+  res.status(404).json({
+    message: `Page not found ~ ${req.originalUrl}`
+  })
+})
 
 app.use(errorMiddleware)
 
