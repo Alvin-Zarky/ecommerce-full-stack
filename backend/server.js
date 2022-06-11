@@ -50,16 +50,16 @@ if(process.env.NODE_ENV==='production'){
     res.sendFile(path.resolve(__dirname, '../' ,'client', 'build', 'index.html'))
   })
 }else{
-  app.get('/mern/api', async(req, res) =>{
+  app.get('/', async(req, res) =>{
     res.send(`Server API is running...!`)
   })
 }
 
-app.use((req, res, next) =>{
-  res.status(404).json({
-    message: `Page not found ~ ${req.originalUrl}`
-  })
-})
+// app.use((req, res, next) =>{
+//   res.status(404).json({
+//     message: `Page not found ~ ${req.originalUrl}`
+//   })
+// })
 
 app.use(errorMiddleware)
 
