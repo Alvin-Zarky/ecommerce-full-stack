@@ -184,11 +184,9 @@ export default function OrderDetail() {
                     </Row>
                   </div>
                 </div>
-                {!order.isPaid && !isPaid && !isSdk && (
-                  <div className="paypal-button">
+                  <div className={`paypal-button ${!order.isPaid && !isPaid && !isSdk ? `` : `disabled`}`}>
                     <PayPalButton onSuccess={handlePayOrder} buttonStyles={buttonStyles} amount={order.totalPrice} />
                   </div>
-                )}
               </Col>
             </Row>
         </div>

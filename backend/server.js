@@ -31,9 +31,6 @@ app.use(logMiddleware)
 
 //route
 // app.use('/mern/api/product', require('./router/product'))
-app.get('/mern/api', async(req, res) =>{
-  res.send(`Server API is running...!`)
-})
 
 app.use('/mern/api/product', productRouter)
 app.use('/mern/api/user', userRouter)
@@ -44,6 +41,17 @@ app.use('/mern/api/upload', upload)
 app.get('/mern/api/config/paypal', (req, res, next) =>{
   res.status(200).json({client_paypal_id: process.env.CLIENT_PAYPAL_ID})  
 })
+
+//Server client
+if(process.env.NODE_ENV==='production'){
+  app.use(express.static(path.join(__dirname, '/client/build')))
+  
+  app.get('*', (req, res, next) =>  res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html')))
+}else{
+  app.get('/mern/api', async(req, res) =>{
+    res.send(`Server API is running...!`)
+  })
+}
 
 app.use((req, res, next) =>{
   res.status(404).json({

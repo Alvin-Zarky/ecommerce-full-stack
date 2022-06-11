@@ -3,7 +3,6 @@ import orderService from "./checkOutService"
 
 const getShippingFromStorage= localStorage.getItem('shipping') ? JSON.parse(localStorage.getItem('shipping')) : null
 const getPaymentFromStorage= localStorage.getItem('payment') ? JSON.parse(localStorage.getItem('payment')) : null
-const getPaidFromStorage= localStorage.getItem('isPaid') ? Boolean(localStorage.getItem('isPaid')) : false
 
 const initialState={
   shipping: getShippingFromStorage,
@@ -139,7 +138,6 @@ const orderSlice= createSlice({
       state.isPaid=false
       state.message= action.payload
     })
-
     //User order paid
     builder.addCase(orderPayUser.pending, (state, action) =>{
       state.isLoading=true
@@ -159,6 +157,7 @@ const orderSlice= createSlice({
       state.isSuccess=false
       state.message = action.payload
     })
+    
   }
 })
 
